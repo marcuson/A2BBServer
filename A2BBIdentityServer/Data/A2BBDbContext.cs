@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using A2BBCommon.Models;
 
-namespace A2BBCommon.Data
+namespace A2BBIdentityServer.Data
 {
     public class A2BBDbContext : IdentityDbContext<User>
     {

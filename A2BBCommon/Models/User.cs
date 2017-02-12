@@ -2,7 +2,9 @@
 
 namespace A2BBCommon.Models
 {
-    // Add profile data for application users by adding properties to the User class
+    /// <summary>
+    /// User POCO.
+    /// </summary>
     public class User : IdentityUser
     {
     }
