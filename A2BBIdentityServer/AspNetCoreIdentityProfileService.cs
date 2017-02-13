@@ -1,4 +1,5 @@
 ﻿using A2BBCommon.Models;
+using A2BBIdentityServer.Models;
 using IdentityModel;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
@@ -52,9 +53,15 @@ namespace A2BBIdentityServer
             var user = await _userManager.FindByIdAsync(sub);
             var roles = await _userManager.GetRolesAsync(user);
 
-            context.AddFilteredClaims(roles.Select(r => new Claim(JwtClaimTypes.Role, r)));
-            context.AddFilteredClaims(
+            if (!context.IssuedClaims.Any(c => c.Type == JwtClaimTypes.Role))
+            {
+                context.AddFilteredClaims(roles.Select(r => new Claim(JwtClaimTypes.Role, r)));
+            }
+            if (!context.IssuedClaims.Any(c => c.Type == JwtClaimTypes.Name))
+            {
+                context.AddFilteredClaims(
                 new List<Claim> { new Claim(JwtClaimTypes.Name, user.UserName) });
+            }
         }
 
         /// <summary>

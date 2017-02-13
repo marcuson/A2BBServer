@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace A2BBIdentityServer.Data.Migrations
 {
-    [DbContext(typeof(A2BBDbContext))]
+    [DbContext(typeof(A2BBIdSrvDbContext))]
     [Migration("20170210120008_PopulateDB")]
     partial class PopulateDB
     {

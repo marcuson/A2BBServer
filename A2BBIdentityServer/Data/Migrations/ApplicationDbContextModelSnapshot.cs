@@ -7,7 +7,7 @@ using A2BBIdentityServer.Data;
 
 namespace A2BBIdentityServer.Data.Migrations
 {
-    [DbContext(typeof(A2BBDbContext))]
+    [DbContext(typeof(A2BBIdSrvDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

@@ -12,7 +12,27 @@ namespace A2BBIdentityServer
     /// </summary>
     public class Config
     {
+        #region Constants
+        /// <summary>
+        /// The Identity Server API resource name.
+        /// </summary>
+        public const string IDSRV_API_RESOURCE_NAME = "IDSRV_API";
+        #endregion
+
         #region Public static methods
+        /// <summary>
+        /// Get identity resources.
+        /// </summary>
+        /// <returns>The identity resources.</returns>
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>
+            {
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile()
+            };
+        }
+
         /// <summary>
         /// Get API resources.
         /// </summary>
@@ -36,6 +56,22 @@ namespace A2BBIdentityServer
                        }
                     },
                     UserClaims = { JwtClaimTypes.Role, JwtClaimTypes.Name }
+                },
+                new ApiResource {
+                    Name = Config.IDSRV_API_RESOURCE_NAME,
+                    DisplayName = "IDSRV API",
+                    Enabled = true,
+                    Scopes =
+                    {
+                       new Scope
+                       {
+                            Name = Config.IDSRV_API_RESOURCE_NAME,
+                            DisplayName = "IDSRV API",
+                            Required = true,
+                            UserClaims = { JwtClaimTypes.Role, JwtClaimTypes.Name }
+                       }
+                    },
+                    UserClaims = { JwtClaimTypes.Role, JwtClaimTypes.Name }
                 }
             };
         }
@@ -50,16 +86,48 @@ namespace A2BBIdentityServer
             {
                 new Client
                 {
-                    ClientId = Constants.OAUTH_CLIENT_ID,
-                    ClientName = "OAuth2 client",
+                    ClientId = Constants.A2BB_IDSRV_RO_CLIENT_ID,
+                    ClientName = "IdSrv client",
+                    ClientSecrets =
+                    {
+                        new Secret(Constants.A2BB_IDSRV_CC_CLIENT_SECRET.Sha256())
+                    },
                     Enabled = true,
 
                     AccessTokenLifetime = 60,
                     AccessTokenType = AccessTokenType.Jwt,
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                     AllowedCorsOrigins = { "*" },
-                    AllowedScopes = { Constants.A2BB_API_RESOURCE_NAME },
-                    RequireClientSecret = false,
+                    AllowedScopes = {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        Config.IDSRV_API_RESOURCE_NAME },
+                    RequireConsent = false
+                },
+                new Client
+                {
+                    ClientId = Constants.A2BB_API_CLIENT_ID,
+                    ClientName = "A2BB client",
+                    ClientSecrets =
+                    {
+                        new Secret(Constants.A2BB_API_CLIENT_SECRET.Sha256())
+                    },
+                    Enabled = true,
+
+                    AccessTokenLifetime = 60,
+                    AccessTokenType = AccessTokenType.Jwt,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+                    AllowedCorsOrigins = { "*" },
+                    AllowOfflineAccess = true,
+                    RefreshTokenUsage = TokenUsage.ReUse,
+                    RefreshTokenExpiration = TokenExpiration.Sliding,
+                    SlidingRefreshTokenLifetime = int.MaxValue,
+                    AllowedScopes = {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        Constants.A2BB_API_RESOURCE_NAME },
                     RequireConsent = false
                 }
             };

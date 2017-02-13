@@ -1,4 +1,5 @@
-﻿using A2BBCommon.Models;
+﻿using A2BBCommon;
+using A2BBCommon.Models;
 using A2BBIdentityServer.Data;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
@@ -52,11 +53,11 @@ namespace A2BBIdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddDbContext<A2BBDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("A2BBConnection")));
+            services.AddDbContext<A2BBIdSrvDbContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("A2BBIdSrvConnection")));
 
             services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<A2BBDbContext>()
+                .AddEntityFrameworkStores<A2BBIdSrvDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
@@ -64,10 +65,11 @@ namespace A2BBIdentityServer
             // Add application services.
             services.AddTransient<IProfileService, AspNetCoreIdentityProfileService>();
 
-            // NOTE: In production, it is better to not use in-memory providers!
+            // NOTE: In production, there are more flexible implementations than in-memory providers!
             // IMPORTANT: In production, do not use temporary signing but a valid certificate!
             services.AddIdentityServer()
                 .AddTemporarySigningCredential()
+                .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients())
                 .AddAspNetIdentity<User>()
@@ -92,6 +94,14 @@ namespace A2BBIdentityServer
             }
 
             app.UseIdentity();
+
+            app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
+            {
+                Authority = Constants.IDENTITY_SERVER_ENDPOINT,
+                AuthenticationScheme = "Bearer",
+                AllowedScopes = { Config.IDSRV_API_RESOURCE_NAME },
+                RequireHttpsMetadata = false
+            });
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
             app.UseIdentityServer();

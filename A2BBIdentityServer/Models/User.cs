@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace A2BBCommon.Models
+namespace A2BBIdentityServer.Models
 {
     /// <summary>
     /// User POCO.
