@@ -32,16 +32,6 @@
         public const string A2BB_IDSRV_RO_CLIENT_ID = "a2bb.ro_id_srv";
 
         /// <summary>
-        /// The client id for A2BB Identity Server (client credentials).
-        /// </summary>
-        public const string A2BB_IDSRV_CC_CLIENT_ID = "a2bb.cc_id_srv";
-
-        /// <summary>
-        /// The client secret for A2BB Identity Server.
-        /// </summary>
-        public const string A2BB_IDSRV_CC_CLIENT_SECRET = "a2bb.cc_id_srv_secret";
-
-        /// <summary>
         /// Name of A2BB API resource.
         /// </summary>
         public const string A2BB_API_RESOURCE_NAME = "A2BB_API";

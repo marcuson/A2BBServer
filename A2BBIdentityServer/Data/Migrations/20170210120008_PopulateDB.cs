@@ -15,7 +15,7 @@ namespace A2BBIdentityServer.Data.Migrations
             migrationBuilder.Sql("INSERT INTO \"AspNetRoles\"(\"Id\", \"Name\", \"NormalizedName\") VALUES ('" + userRoleGuid.ToString() + "', 'User', 'USER')");
 
             Guid firstAdminGuid = Guid.NewGuid();
-            migrationBuilder.Sql("INSERT INTO a2bb.\"AspNetUsers\"(" +
+            migrationBuilder.Sql("INSERT INTO \"AspNetUsers\"(" +
                 "\"Id\", " +
                 "\"AccessFailedCount\", " +
                 "\"ConcurrencyStamp\", " +
@@ -49,16 +49,16 @@ namespace A2BBIdentityServer.Data.Migrations
                 "FALSE, " +
                 "'Admin')");
 
-            migrationBuilder.Sql("INSERT INTO a2bb.\"AspNetUserRoles\"(\"UserId\", \"RoleId\") " +
+            migrationBuilder.Sql("INSERT INTO \"AspNetUserRoles\"(\"UserId\", \"RoleId\") " +
                 "VALUES ('" + firstAdminGuid + "', '" + adminRoleGuid + "')");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("DELETE FROM a2bb.\"AspNetRoles\" WHERE \"Name\" = 'Admin'");
-            migrationBuilder.Sql("DELETE FROM a2bb.\"AspNetRoles\" WHERE \"Name\" = 'User'");
+            migrationBuilder.Sql("DELETE FROM \"AspNetRoles\" WHERE \"Name\" = 'Admin'");
+            migrationBuilder.Sql("DELETE FROM \"AspNetRoles\" WHERE \"Name\" = 'User'");
 
-            migrationBuilder.Sql("DELETE FROM a2bb.\"AspNetUsers\" WHERE \"Name\" = 'Admin'");
+            migrationBuilder.Sql("DELETE FROM \"AspNetUsers\" WHERE \"Name\" = 'Admin'");
         }
     }
 }

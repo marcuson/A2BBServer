@@ -88,10 +88,6 @@ namespace A2BBIdentityServer
                 {
                     ClientId = Constants.A2BB_IDSRV_RO_CLIENT_ID,
                     ClientName = "IdSrv client",
-                    ClientSecrets =
-                    {
-                        new Secret(Constants.A2BB_IDSRV_CC_CLIENT_SECRET.Sha256())
-                    },
                     Enabled = true,
 
                     AccessTokenLifetime = 60,
@@ -103,6 +99,7 @@ namespace A2BBIdentityServer
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         Config.IDSRV_API_RESOURCE_NAME },
+                    RequireClientSecret = false,
                     RequireConsent = false
                 },
                 new Client
