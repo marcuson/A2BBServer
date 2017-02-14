@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace A2BBIdentityServer.Controllers
 {
@@ -58,6 +59,26 @@ namespace A2BBIdentityServer.Controllers
         public IEnumerable<User> ListUsers()
         {
             return _userManager.Users;
+        }
+
+        [HttpDelete]
+        [Route("{userId}")]
+        public async Task<ResponseWrapper<IdentityResult>> DeleteUser([FromRoute] string userId)
+        {
+            var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+            if (user == null)
+            {
+                return new ResponseWrapper<IdentityResult>(Constants.RestReturn.ERR_USER_NOT_FOUND);
+            }
+
+            IdentityResult res = await _userManager.DeleteAsync(user);
+
+            if (!res.Succeeded)
+            {
+                return new ResponseWrapper<IdentityResult>(res, Constants.RestReturn.ERR_USER_DELETE);
+            }
+
+            return new ResponseWrapper<IdentityResult>(res);
         }
 
         /// <summary>
