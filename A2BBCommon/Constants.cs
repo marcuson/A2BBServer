@@ -46,6 +46,8 @@
             ERR_USER_ROLE_ASSIGN,
             ERR_INVALID_SUB_CLAIM,
             ERR_INVALID_NAME_CLAIM,
+            ERR_USER_NOT_FOUND,
+            ERR_USER_DELETE,
             ERR_UNKNOWN
         }
         #endregion
@@ -76,6 +78,10 @@
                     return 0x00000003;
                 case Constants.RestReturn.ERR_INVALID_NAME_CLAIM:
                     return 0x00000004;
+                case Constants.RestReturn.ERR_USER_NOT_FOUND:
+                    return 0x00000005;
+                case Constants.RestReturn.ERR_USER_DELETE:
+                    return 0x00000006;
                 default:
                     return 0xFFFFFFFF;
             }
@@ -100,6 +106,10 @@
                     return "Error invalid sub claim";
                 case Constants.RestReturn.ERR_INVALID_NAME_CLAIM:
                     return "Error invalid name claim";
+                case Constants.RestReturn.ERR_USER_NOT_FOUND:
+                    return "Error user not found";
+                case Constants.RestReturn.ERR_USER_DELETE:
+                    return "Error during user deletion";
                 default:
                     return "Unknown erorr";
             }
