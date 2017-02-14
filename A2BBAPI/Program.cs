@@ -5,16 +5,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using A2BBCommon;
 
 namespace A2BBAPI
 {
+    /// <summary>
+    /// Main entry class of the application.
+    /// </summary>
     public class Program
     {
+        #region Public static methods
+        /// <summary>
+        /// Main entry point of the application.
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
-                .UseUrls("http://localhost:5001")
+                .UseUrls(Constants.API_ENDPOINT)
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
@@ -23,5 +32,6 @@ namespace A2BBAPI
 
             host.Run();
         }
+        #endregion
     }
 }

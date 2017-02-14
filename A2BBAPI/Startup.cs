@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using A2BBAPI.Data;
+using A2BBCommon;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -28,7 +29,18 @@ namespace A2BBAPI
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
+            services.AddDbContext<A2BBApiDbContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("A2BBApiConnection")));
+
+            var authUserPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireClaim("sub")
+                .Build();
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new AuthorizeFilter(authUserPolicy));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,9 +51,10 @@ namespace A2BBAPI
 
             app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
             {
-                Authority = "http://localhost:5000",
-                AllowedScopes = { "A2BBAPI" },
-                RequireHttpsMetadata = false,
+                Authority = Constants.IDENTITY_SERVER_ENDPOINT,
+                AuthenticationScheme = "Bearer",
+                AllowedScopes = { Constants.A2BB_API_RESOURCE_NAME },
+                RequireHttpsMetadata = false
             });
 
             app.UseMvc();
