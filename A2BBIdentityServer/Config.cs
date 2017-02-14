@@ -93,14 +93,18 @@ namespace A2BBIdentityServer
                     AccessTokenLifetime = 60,
                     AccessTokenType = AccessTokenType.Jwt,
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    AllowedCorsOrigins = { "*" },
+                    AllowedCorsOrigins = { "*", "http://localhost:4200" },
+                    AllowOfflineAccess = true,
                     AllowedScopes = {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         Config.IDSRV_API_RESOURCE_NAME },
                     RequireClientSecret = false,
-                    RequireConsent = false
+                    RequireConsent = false,
+                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                    RefreshTokenExpiration = TokenExpiration.Sliding,
+                    SlidingRefreshTokenLifetime = 60 * 60
                 },
                 new Client
                 {
