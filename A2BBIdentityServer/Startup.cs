@@ -62,6 +62,7 @@ namespace A2BBIdentityServer
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
+            services.AddCors();
 
             // Add application services.
             services.AddTransient<IProfileService, AspNetCoreIdentityProfileService>();
@@ -85,6 +86,8 @@ namespace A2BBIdentityServer
         /// <param name="loggerFactory">The logger factory.</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
@@ -95,7 +98,7 @@ namespace A2BBIdentityServer
             }
 
             app.UseIdentity();
-
+            
             app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
             {
                 Authority = Constants.IDENTITY_SERVER_ENDPOINT,
