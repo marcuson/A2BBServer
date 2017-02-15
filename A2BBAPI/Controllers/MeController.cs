@@ -10,9 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using static A2BBAPI.Utils.ClaimsUtils;
@@ -51,6 +53,11 @@ namespace A2BBAPI.Controllers
             _logger = loggerFactory.CreateLogger<MeController>();
         }
 
+        /// <summary>
+        /// Change user password.
+        /// </summary>
+        /// <param name="req">The request parameters.</param>
+        /// <returns>The response with status.</returns>
         [HttpPut]
         [Route("changepass")]
         public async Task<ResponseWrapper<IdentityResult>> ChangePass([FromBody] ChangePassRequestDTO req)
@@ -91,7 +98,14 @@ namespace A2BBAPI.Controllers
 
             string resContent = await res.Content.ReadAsStringAsync();
             var identityRes = JsonConvert.DeserializeObject<ResponseWrapper<IdentityResult>>(resContent);
-            
+
+            // Fix JSON deserialization
+            if (identityRes.Payload.Errors.GetEnumerator().MoveNext() == false)
+            {
+                var prop = identityRes.Payload.GetType().GetProperty("Succeeded");
+                prop.SetValue(identityRes.Payload, true);
+            }
+
             return identityRes;
         }
         #endregion
