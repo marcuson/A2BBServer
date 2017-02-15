@@ -12,13 +12,6 @@ namespace A2BBIdentityServer
     /// </summary>
     public class Config
     {
-        #region Constants
-        /// <summary>
-        /// The Identity Server API resource name.
-        /// </summary>
-        public const string IDSRV_API_RESOURCE_NAME = "IDSRV_API";
-        #endregion
-
         #region Public static methods
         /// <summary>
         /// Get identity resources.
@@ -58,14 +51,14 @@ namespace A2BBIdentityServer
                     UserClaims = { JwtClaimTypes.Role, JwtClaimTypes.Name }
                 },
                 new ApiResource {
-                    Name = Config.IDSRV_API_RESOURCE_NAME,
+                    Name = Constants.A2BB_IDSRV_RESOURCE_NAME,
                     DisplayName = "IDSRV API",
                     Enabled = true,
                     Scopes =
                     {
                        new Scope
                        {
-                            Name = Config.IDSRV_API_RESOURCE_NAME,
+                            Name = Constants.A2BB_IDSRV_RESOURCE_NAME,
                             DisplayName = "IDSRV API",
                             Required = true,
                             UserClaims = { JwtClaimTypes.Role, JwtClaimTypes.Name }
@@ -99,7 +92,7 @@ namespace A2BBIdentityServer
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        Config.IDSRV_API_RESOURCE_NAME },
+                        Constants.A2BB_IDSRV_RESOURCE_NAME },
                     RequireClientSecret = false,
                     RequireConsent = false,
                     RefreshTokenUsage = TokenUsage.OneTimeOnly,

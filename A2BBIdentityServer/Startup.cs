@@ -103,7 +103,7 @@ namespace A2BBIdentityServer
             {
                 Authority = Constants.IDENTITY_SERVER_ENDPOINT,
                 AuthenticationScheme = "Bearer",
-                AllowedScopes = { Config.IDSRV_API_RESOURCE_NAME },
+                AllowedScopes = { Constants.A2BB_IDSRV_RESOURCE_NAME },
                 RequireHttpsMetadata = false
             });
 

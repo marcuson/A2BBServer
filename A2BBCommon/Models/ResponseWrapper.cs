@@ -27,6 +27,13 @@ namespace A2BBCommon.Models
 
         #region Public methods
         /// <summary>
+        /// Default constructor, used for JSOn deserialization.
+        /// </summary>
+        private ResponseWrapper()
+        {
+        }
+
+        /// <summary>
         /// Create a new instance of this class.
         /// </summary>
         /// <param name="payload">The actual payload.</param>
