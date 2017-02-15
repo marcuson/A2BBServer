@@ -1,72 +1,99 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using A2BBCommon.Models;
-using A2BBCommon;
 using A2BBAPI.Data;
+using A2BBAPI.Utils;
+using A2BBCommon;
+using A2BBCommon.DTO;
+using A2BBCommon.Models;
 using IdentityModel.Client;
-using A2BBAPI.DTO;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using A2BBAPI.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+using static A2BBAPI.Utils.ClaimsUtils;
 
 namespace A2BBAPI.Controllers
 {
+    /// <summary>
+    /// Controller for authorized user to configure their profile.
+    /// </summary>
     [Produces("application/json")]
     [Route("api/me")]
     [Authorize]
     public class MeController : Controller
     {
+        #region Private fields
+        /// <summary>
+        /// The DB context.
+        /// </summary>
         private readonly A2BBApiDbContext _dbContext;
-        private readonly ILogger _logger;
 
+        /// <summary>
+        /// The logger.
+        /// </summary>
+        private readonly ILogger _logger;
+        #endregion
+
+        #region Public methods
+        /// <summary>
+        /// Create a new instance of this class.
+        /// </summary>
+        /// <param name="dbContext">The DI DB context.</param>
+        /// <param name="loggerFactory">The DI logger factory.</param>
         public MeController(A2BBApiDbContext dbContext, ILoggerFactory loggerFactory)
         {
             _dbContext = dbContext;
             _logger = loggerFactory.CreateLogger<MeController>();
         }
 
-        [HttpGet]
-        [Route("devices")]
-        public ResponseWrapper<IEnumerable<Device>> ListDevices()
+        [HttpPut]
+        [Route("changepass")]
+        public async Task<ResponseWrapper<IdentityResult>> ChangePass([FromBody] ChangePassRequestDTO req)
         {
-            return new ResponseWrapper<IEnumerable<Device>>(_dbContext.Device.Where(d => d.UserId == User.Claims.FirstOrDefault(c => c.Type == "sub").Value), Constants.RestReturn.OK);
-        }
+            ClaimsHolder claimsHolder;
 
-        [HttpPost]
-        [Route("link")]
-        public async Task<ResponseWrapper<Device>> Link([FromBody] NewLinkRequestDTO req)
-        {
-            var subClaim = User.Claims.FirstOrDefault(c => c.Type == "sub");
-            if (subClaim == null || String.IsNullOrWhiteSpace(subClaim.Value))
+            try
             {
-                return new ResponseWrapper<Device>(Constants.RestReturn.ERR_INVALID_SUB_CLAIM);
+                claimsHolder = ClaimsUtils.ValidateUserClaimForIdSrvCall(User);
             }
-
-            var name = User.Identity.Name;
-            if (name == null || String.IsNullOrWhiteSpace(name))
+            catch (RestReturnException ex)
             {
-                return new ResponseWrapper<Device>(Constants.RestReturn.ERR_INVALID_NAME_CLAIM);
+                return new ResponseWrapper<IdentityResult>(ex.Value);
             }
 
             var disco = await DiscoveryClient.GetAsync(Constants.IDENTITY_SERVER_ENDPOINT);
-            var client = new TokenClient(disco.TokenEndpoint, Constants.A2BB_API_CLIENT_ID, Constants.A2BB_API_CLIENT_SECRET);
-            var response = await client.RequestResourceOwnerPasswordAsync(name, req.Password);
+            var client = new TokenClient(disco.TokenEndpoint);
+            var response = await client.RequestResourceOwnerPasswordAsync(claimsHolder.Name, req.OldPassword, Constants.A2BB_IDSRV_RESOURCE_NAME, new Dictionary<string, string> {
+                { "client_id", Constants.A2BB_IDSRV_RO_CLIENT_ID }
+            });
 
-            var sub = _dbContext.Subject.FirstOrDefault(s => s.Id == subClaim.Value);
-            if (sub == null)
+            if (response.IsError)
             {
-                sub = new Subject { Id = subClaim.Value };
-                _dbContext.Subject.Add(sub);
+                return new ResponseWrapper<IdentityResult>(Constants.RestReturn.ERR_INVALID_PASS);
             }
 
-            var d = new Device { RefreshToken = response.RefreshToken };
-            sub.Device.Add(d);
-            _dbContext.SaveChanges();
+            var userClient = new HttpClient();
+            userClient.DefaultRequestHeaders.Accept.Clear();
+            userClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            userClient.SetBearerToken(response.AccessToken);
+            var body = new StringContent(JsonConvert.SerializeObject(req), Encoding.UTF8, "application/json");
+            var res = await userClient.PutAsync(Constants.IDENTITY_SERVER_ENDPOINT + "/api/me/changepass", body);
 
-            return new ResponseWrapper<Device>(d, Constants.RestReturn.OK);
+            if (!res.IsSuccessStatusCode)
+            {
+                return new ResponseWrapper<IdentityResult>(Constants.RestReturn.ERR_USER_UPDATE);
+            }
+
+            string resContent = await res.Content.ReadAsStringAsync();
+            var identityRes = JsonConvert.DeserializeObject<ResponseWrapper<IdentityResult>>(resContent);
+            
+            return identityRes;
         }
+        #endregion
     }
 }
