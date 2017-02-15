@@ -68,6 +68,7 @@ namespace A2BBIdentityServer.Controllers
         /// <param name="req">The request parameters.</param>
         /// <returns>The response with status.</returns>
         [HttpPut]
+        [Route("changepass")]
         public async Task<ResponseWrapper<IdentityResult>> UpdateUserPass([FromBody] ChangePassRequestDTO req)
         {
             User user = _userManager.Users.FirstOrDefault(u => u.Id == User.Claims.FirstOrDefault(c => c.Type == "sub").Value);
