@@ -73,11 +73,7 @@ namespace A2BBAPI.Controllers
                 return new ResponseWrapper<IdentityResult>(ex.Value);
             }
 
-            var disco = await DiscoveryClient.GetAsync(Constants.IDENTITY_SERVER_ENDPOINT);
-            var client = new TokenClient(disco.TokenEndpoint);
-            var response = await client.RequestResourceOwnerPasswordAsync(claimsHolder.Name, req.OldPassword, Constants.A2BB_IDSRV_RESOURCE_NAME, new Dictionary<string, string> {
-                { "client_id", Constants.A2BB_IDSRV_RO_CLIENT_ID }
-            });
+            var response = ClientUtils.GetROClient(Constants.A2BB_IDSRV_RESOURCE_NAME, Constants.A2BB_IDSRV_RO_CLIENT_ID, claimsHolder.Name, req.OldPassword);
 
             if (response.IsError)
             {
