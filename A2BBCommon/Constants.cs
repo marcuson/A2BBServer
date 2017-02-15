@@ -32,6 +32,11 @@
         public const string A2BB_IDSRV_RO_CLIENT_ID = "a2bb.ro_id_srv";
 
         /// <summary>
+        /// Name of IdSrv API resource.
+        /// </summary>
+        public const string A2BB_IDSRV_RESOURCE_NAME = "IDSRV_API";
+
+        /// <summary>
         /// Name of A2BB API resource.
         /// </summary>
         public const string A2BB_API_RESOURCE_NAME = "A2BB_API";
