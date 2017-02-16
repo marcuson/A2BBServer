@@ -37,6 +37,7 @@ namespace A2BBAPI
                 .RequireClaim("sub")
                 .Build();
 
+            services.AddMemoryCache();
             services.AddMvc(options =>
             {
                 options.Filters.Add(new AuthorizeFilter(authUserPolicy));
