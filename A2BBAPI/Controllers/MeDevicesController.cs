@@ -13,6 +13,7 @@ using A2BBAPI.Models;
 using System.Collections.Generic;
 using A2BBAPI.Utils;
 using static A2BBAPI.Utils.ClaimsUtils;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace A2BBAPI.Controllers
 {
@@ -34,6 +35,11 @@ namespace A2BBAPI.Controllers
         /// The logger.
         /// </summary>
         private readonly ILogger _logger;
+
+        /// <summary>
+        /// The in memory cache.
+        /// </summary>
+        private readonly IMemoryCache _memCache;
         #endregion
 
         #region Public methods
@@ -42,10 +48,12 @@ namespace A2BBAPI.Controllers
         /// </summary>
         /// <param name="dbContext">The DI DB context.</param>
         /// <param name="loggerFactory">The DI logger factory.</param>
-        public MeDevicesController(A2BBApiDbContext dbContext, ILoggerFactory loggerFactory)
+        /// <param name="memCache">The DI in memory cache.</param>
+        public MeDevicesController(A2BBApiDbContext dbContext, ILoggerFactory loggerFactory, IMemoryCache memCache)
         {
             _dbContext = dbContext;
             _logger = loggerFactory.CreateLogger<MeController>();
+            _memCache = memCache;
         }
 
         /// <summary>
@@ -59,12 +67,12 @@ namespace A2BBAPI.Controllers
         }
 
         /// <summary>
-        /// Link a new device to the user.
+        /// Start linking a new device to the user.
         /// </summary>
         /// <param name="req">The request params.</param>
-        /// <returns>The response with status.</returns>
+        /// <returns>The response with temp guid to actually link device.</returns>
         [HttpPost]
-        public ResponseWrapper<Device> Link([FromBody] NewLinkRequestDTO req)
+        public ResponseWrapper<string> StartLink([FromBody] NewLinkRequestDTO req)
         {
             ClaimsHolder claimsHolder;
 
@@ -74,14 +82,14 @@ namespace A2BBAPI.Controllers
             }
             catch (RestReturnException ex)
             {
-                return new ResponseWrapper<Device>(ex.Value);
+                return new ResponseWrapper<string>(ex.Value);
             }
 
-            var response = ClientUtils.GetROClient(Constants.A2BB_API_RESOURCE_NAME + " offline_access", Constants.A2BB_API_CLIENT_ID, claimsHolder.Name, req.Password);
+            var response = ClientUtils.GetROClient(Constants.A2BB_API_RESOURCE_NAME, Constants.A2BB_API_CLIENT_ID, claimsHolder.Name, req.Password);
 
             if (response.IsError)
             {
-                return new ResponseWrapper<Device>(Constants.RestReturn.ERR_INVALID_PASS);
+                return new ResponseWrapper<string>(Constants.RestReturn.ERR_INVALID_PASS);
             }
 
             var sub = _dbContext.Subject.FirstOrDefault(s => s.Id == claimsHolder.Sub);
@@ -89,13 +97,22 @@ namespace A2BBAPI.Controllers
             {
                 sub = new Subject { Id = claimsHolder.Sub };
                 _dbContext.Subject.Add(sub);
+                _dbContext.SaveChanges();
             }
 
-            req.Device.RefreshToken = response.RefreshToken;
-            sub.Device.Add(req.Device);
-            _dbContext.SaveChanges();
+            var linkHolder = new LinkHolder
+            {
+                Device = req.Device,
+                Username = claimsHolder.Name,
+                Password = req.Password,
+                Subject = claimsHolder.Sub,
+                IsEstabilished = false
+            };
 
-            return new ResponseWrapper<Device>(req.Device, Constants.RestReturn.OK);
+            var guid = Guid.NewGuid();
+            _memCache.Set(guid.ToString(), linkHolder, new MemoryCacheEntryOptions { SlidingExpiration = TimeSpan.FromSeconds(90) });
+
+            return new ResponseWrapper<string>(guid.ToString(), Constants.RestReturn.OK);
         }
 
         /// <summary>
