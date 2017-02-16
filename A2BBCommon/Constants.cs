@@ -55,6 +55,7 @@
             ERR_USER_DELETE,
             ERR_INVALID_PASS,
             ERR_USER_UPDATE,
+            ERR_LINK,
             ERR_UNKNOWN
         }
         #endregion
@@ -93,6 +94,8 @@
                     return 0x00000007;
                 case Constants.RestReturn.ERR_USER_UPDATE:
                     return 0x00000008;
+                case Constants.RestReturn.ERR_LINK:
+                    return 0x00000009;
                 default:
                     return 0xFFFFFFFF;
             }
@@ -125,6 +128,8 @@
                     return "Error invalid password";
                 case Constants.RestReturn.ERR_USER_UPDATE:
                     return "Error during user update";
+                case Constants.RestReturn.ERR_LINK:
+                    return "Error during linking/link refresh";
                 default:
                     return "Unknown erorr";
             }
