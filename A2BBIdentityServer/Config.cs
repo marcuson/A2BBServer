@@ -103,27 +103,23 @@ namespace A2BBIdentityServer
                 {
                     ClientId = Constants.A2BB_API_CLIENT_ID,
                     ClientName = "A2BB client",
-                    ClientSecrets =
-                    {
-                        new Secret(Constants.A2BB_API_CLIENT_SECRET.Sha256())
-                    },
                     Enabled = true,
 
                     AccessTokenLifetime = 60,
                     AccessTokenType = AccessTokenType.Jwt,
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
-                    AllowedCorsOrigins = { "*" },
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    AllowedCorsOrigins = { "*", "http://localhost:4200" },
                     AllowOfflineAccess = true,
-                    RefreshTokenUsage = TokenUsage.ReUse,
-                    RefreshTokenExpiration = TokenExpiration.Sliding,
-                    SlidingRefreshTokenLifetime = int.MaxValue,
                     AllowedScopes = {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         Constants.A2BB_API_RESOURCE_NAME },
                     RequireClientSecret = false,
-                    RequireConsent = false
+                    RequireConsent = false,
+                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                    RefreshTokenExpiration = TokenExpiration.Sliding,
+                    SlidingRefreshTokenLifetime = 60 * 60
                 }
             };
         }
