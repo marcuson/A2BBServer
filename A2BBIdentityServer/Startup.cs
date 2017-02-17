@@ -86,10 +86,10 @@ namespace A2BBIdentityServer
         /// <param name="loggerFactory">The logger factory.</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             if (env.IsDevelopment())
             {
@@ -103,7 +103,7 @@ namespace A2BBIdentityServer
             {
                 Authority = Constants.IDENTITY_SERVER_ENDPOINT,
                 AuthenticationScheme = "Bearer",
-                AllowedScopes = { Config.IDSRV_API_RESOURCE_NAME },
+                AllowedScopes = { Constants.A2BB_IDSRV_RESOURCE_NAME },
                 RequireHttpsMetadata = false
             });
 

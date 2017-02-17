@@ -32,6 +32,11 @@
         public const string A2BB_IDSRV_RO_CLIENT_ID = "a2bb.ro_id_srv";
 
         /// <summary>
+        /// Name of IdSrv API resource.
+        /// </summary>
+        public const string A2BB_IDSRV_RESOURCE_NAME = "IDSRV_API";
+
+        /// <summary>
         /// Name of A2BB API resource.
         /// </summary>
         public const string A2BB_API_RESOURCE_NAME = "A2BB_API";
@@ -48,6 +53,9 @@
             ERR_INVALID_NAME_CLAIM,
             ERR_USER_NOT_FOUND,
             ERR_USER_DELETE,
+            ERR_INVALID_PASS,
+            ERR_USER_UPDATE,
+            ERR_LINK,
             ERR_UNKNOWN
         }
         #endregion
@@ -82,6 +90,12 @@
                     return 0x00000005;
                 case Constants.RestReturn.ERR_USER_DELETE:
                     return 0x00000006;
+                case Constants.RestReturn.ERR_INVALID_PASS:
+                    return 0x00000007;
+                case Constants.RestReturn.ERR_USER_UPDATE:
+                    return 0x00000008;
+                case Constants.RestReturn.ERR_LINK:
+                    return 0x00000009;
                 default:
                     return 0xFFFFFFFF;
             }
@@ -110,6 +124,12 @@
                     return "Error user not found";
                 case Constants.RestReturn.ERR_USER_DELETE:
                     return "Error during user deletion";
+                case Constants.RestReturn.ERR_INVALID_PASS:
+                    return "Error invalid password";
+                case Constants.RestReturn.ERR_USER_UPDATE:
+                    return "Error during user update";
+                case Constants.RestReturn.ERR_LINK:
+                    return "Error during linking/link refresh";
                 default:
                     return "Unknown erorr";
             }

@@ -13,7 +13,7 @@ using System.Linq;
 namespace A2BBIdentityServer.Controllers
 {
     /// <summary>
-    /// Controller to deal with user.
+    /// Controller to deal with user via admin credentials.
     /// </summary>
     [Produces("application/json")]
     [Route("api/admin/users")]
@@ -61,6 +61,11 @@ namespace A2BBIdentityServer.Controllers
             return _userManager.Users;
         }
 
+        /// <summary>
+        /// Delete an user.
+        /// </summary>
+        /// <param name="userId">The id of the user to delete.</param>
+        /// <returns>The response with status.</returns>
         [HttpDelete]
         [Route("{userId}")]
         public async Task<ResponseWrapper<IdentityResult>> DeleteUser([FromRoute] string userId)
