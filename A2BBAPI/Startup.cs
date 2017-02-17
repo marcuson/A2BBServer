@@ -42,6 +42,7 @@ namespace A2BBAPI
             {
                 options.Filters.Add(new AuthorizeFilter(authUserPolicy));
             });
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +50,8 @@ namespace A2BBAPI
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
             {
