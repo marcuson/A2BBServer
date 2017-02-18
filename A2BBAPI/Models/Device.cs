@@ -7,6 +7,11 @@ namespace A2BBAPI.Models
     [JsonObject(IsReference = true)]
     public partial class Device
     {
+        public Device()
+        {
+            InOut = new HashSet<InOut>();
+        }
+
         public int Id { get; set; }
         public string RefreshToken { get; set; }
         public string UserId { get; set; }
@@ -14,5 +19,8 @@ namespace A2BBAPI.Models
         public string Name { get; set; }
 
         public virtual Subject User { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<InOut> InOut { get; set; }
     }
 }

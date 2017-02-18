@@ -54,6 +54,12 @@ namespace A2BBAPI.Data
 
                 entity.Property(e => e.DeviceId).HasColumnName("device_id");
 
+                entity.HasOne(e => e.Device)
+                    .WithMany(p => p.InOut)
+                    .HasForeignKey(e => e.DeviceId)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("in_out_device_fk");
+
                 entity.Property(e => e.OnDate)
                     .HasColumnName("on_date")
                     .HasColumnType("timestamptz");
