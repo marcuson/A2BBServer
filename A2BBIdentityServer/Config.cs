@@ -80,7 +80,7 @@ namespace A2BBIdentityServer
                 new Client
                 {
                     ClientId = Constants.A2BB_IDSRV_RO_CLIENT_ID,
-                    ClientName = "IdSrv client",
+                    ClientName = "IdSrv RO client",
                     Enabled = true,
 
                     AccessTokenLifetime = 60,
@@ -101,8 +101,8 @@ namespace A2BBIdentityServer
                 },
                 new Client
                 {
-                    ClientId = Constants.A2BB_API_CLIENT_ID,
-                    ClientName = "A2BB client",
+                    ClientId = Constants.A2BB_API_RO_CLIENT_ID,
+                    ClientName = "A2BB RO client",
                     Enabled = true,
 
                     AccessTokenLifetime = 60,

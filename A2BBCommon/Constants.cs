@@ -17,14 +17,19 @@
         public const string API_ENDPOINT = "http://localhost:5001";
 
         /// <summary>
-        /// The client id for A2BB API.
+        /// The client id for A2BB API (for resource onwer/pass flow).
         /// </summary>
-        public const string A2BB_API_CLIENT_ID = "a2bb_api";
+        public const string A2BB_API_RO_CLIENT_ID = "a2bb.ro_api";
+
+        /// <summary>
+        /// The client id for A2BB API (for client flow).
+        /// </summary>
+        public const string A2BB_API_CC_CLIENT_ID = "a2bb.cc_api";
 
         /// <summary>
         /// The client secret for A2BB API.
         /// </summary>
-        public const string A2BB_API_CLIENT_SECRET = "a2bb_api_secret";
+        public const string A2BB_API_CC_CLIENT_SECRET = "a2bb.cc_api_secret";
 
         /// <summary>
         /// The client id for A2BB Identity Server (resource owner).
@@ -56,6 +61,8 @@
             ERR_INVALID_PASS,
             ERR_USER_UPDATE,
             ERR_LINK,
+            ERR_DEVICE_NOT_FOUND,
+            ERR_DEVICE_DISABLED,
             ERR_UNKNOWN
         }
         #endregion
@@ -96,6 +103,10 @@
                     return 0x00000008;
                 case Constants.RestReturn.ERR_LINK:
                     return 0x00000009;
+                case Constants.RestReturn.ERR_DEVICE_NOT_FOUND:
+                    return 0x0000000A;
+                case Constants.RestReturn.ERR_DEVICE_DISABLED:
+                    return 0x0000000B;
                 default:
                     return 0xFFFFFFFF;
             }
@@ -130,6 +141,10 @@
                     return "Error during user update";
                 case Constants.RestReturn.ERR_LINK:
                     return "Error during linking/link refresh";
+                case Constants.RestReturn.ERR_DEVICE_NOT_FOUND:
+                    return "Error device not found";
+                case Constants.RestReturn.ERR_DEVICE_DISABLED:
+                    return "Error device disabled";
                 default:
                     return "Unknown erorr";
             }
