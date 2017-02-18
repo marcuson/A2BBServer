@@ -85,7 +85,7 @@ namespace A2BBAPI.Controllers
                 return new ResponseWrapper<string>(ex.Value);
             }
 
-            var response = ClientUtils.GetROClient(Constants.A2BB_API_RESOURCE_NAME, Constants.A2BB_API_CLIENT_ID, claimsHolder.Name, req.Password);
+            var response = ClientUtils.GetROClient(Constants.A2BB_API_RESOURCE_NAME, Constants.A2BB_API_RO_CLIENT_ID, claimsHolder.Name, req.Password);
 
             if (response.IsError)
             {

@@ -86,7 +86,7 @@ namespace A2BBAPI.Controllers
                 return new ResponseWrapper<Device>(Constants.RestReturn.ERR_LINK);
             }
 
-            var response = ClientUtils.GetROClient(Constants.A2BB_API_RESOURCE_NAME + " offline_access", Constants.A2BB_API_CLIENT_ID, link.Username, link.Password);
+            var response = ClientUtils.GetROClient(Constants.A2BB_API_RESOURCE_NAME + " offline_access", Constants.A2BB_API_RO_CLIENT_ID, link.Username, link.Password);
 
             if (response.IsError)
             {
