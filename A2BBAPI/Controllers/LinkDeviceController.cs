@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System.Linq;
-using static A2BBAPI.Utils.ClaimsUtils;
 
 namespace A2BBAPI.Controllers
 {
@@ -18,7 +17,7 @@ namespace A2BBAPI.Controllers
     /// </summary>
     [Produces("application/json")]
     [Route("api/link")]
-    [AllowAnonymous]
+    [Authorize]
     public class LinkDeviceController : Controller
     {
         #region Private fields
@@ -40,7 +39,7 @@ namespace A2BBAPI.Controllers
 
         #region Public methods
         /// <summary>
-        /// Create a new isntance of this class.
+        /// Create a new instance of this class.
         /// </summary>
         /// <param name="dbContext">The DI DB context.</param>
         /// <param name="loggerFactory">The DI logger factory.</param>
@@ -78,6 +77,7 @@ namespace A2BBAPI.Controllers
         /// <returns>The response with status.</returns>
         [HttpPost]
         [Route("{tempGuid}")]
+        [AllowAnonymous]
         public ResponseWrapper<Device> Link([FromRoute] string tempGuid)
         {
             LinkHolder link;
