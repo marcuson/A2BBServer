@@ -50,7 +50,8 @@ namespace A2BBAPI.Controllers
         [HttpGet]
         public ResponseWrapper<IEnumerable<InOut>> ListAll()
         {
-            return new ResponseWrapper<IEnumerable<InOut>>(_dbContext.InOut.Where(io => io.Device.UserId == User.Claims.FirstOrDefault(c => c.Type == "sub").Value), Constants.RestReturn.OK);
+            return new ResponseWrapper<IEnumerable<InOut>>(_dbContext.InOut.Where(io => io.Device.UserId == User.Claims.FirstOrDefault(c => c.Type == "sub").Value)
+                .Include(io => io.Device), Constants.RestReturn.OK);
         }
 
         /// <summary>
@@ -61,8 +62,8 @@ namespace A2BBAPI.Controllers
         [Route("{deviceId}")]
         public ResponseWrapper<IEnumerable<InOut>> ListOfSpecificDevice([FromRoute] int deviceId)
         {
-            return new ResponseWrapper<IEnumerable<InOut>>(_dbContext.InOut.Where(io => io.Device.UserId == User.Claims.FirstOrDefault(c => c.Type == "sub").Value && io.DeviceId == deviceId),
-                Constants.RestReturn.OK);
+            return new ResponseWrapper<IEnumerable<InOut>>(_dbContext.InOut.Where(io => io.Device.UserId == User.Claims.FirstOrDefault(c => c.Type == "sub").Value && io.DeviceId == deviceId)
+                .Include(io => io.Device), Constants.RestReturn.OK);
         }
         #endregion
     }
