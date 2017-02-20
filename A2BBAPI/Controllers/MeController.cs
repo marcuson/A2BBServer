@@ -26,7 +26,7 @@ namespace A2BBAPI.Controllers
     /// </summary>
     [Produces("application/json")]
     [Route("api/me")]
-    [Authorize]
+    [Authorize("User")]
     public class MeController : Controller
     {
         #region Private fields

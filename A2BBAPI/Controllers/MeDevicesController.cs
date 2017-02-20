@@ -22,7 +22,7 @@ namespace A2BBAPI.Controllers
     /// </summary>
     [Produces("application/json")]
     [Route("api/me/devices")]
-    [Authorize]
+    [Authorize("User")]
     public class MeDevicesController : Controller
     {
         #region Private fields
@@ -83,13 +83,6 @@ namespace A2BBAPI.Controllers
             catch (RestReturnException ex)
             {
                 return new ResponseWrapper<string>(ex.Value);
-            }
-
-            var response = ClientUtils.GetROClient(Constants.A2BB_API_RESOURCE_NAME, Constants.A2BB_API_RO_CLIENT_ID, claimsHolder.Name, req.Password);
-
-            if (response.IsError)
-            {
-                return new ResponseWrapper<string>(Constants.RestReturn.ERR_INVALID_PASS);
             }
 
             var sub = _dbContext.Subject.FirstOrDefault(s => s.Id == claimsHolder.Sub);

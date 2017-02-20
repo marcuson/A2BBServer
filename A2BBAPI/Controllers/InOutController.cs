@@ -14,7 +14,7 @@ namespace A2BBAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api")]
-    [AllowAnonymous]
+    [Authorize("Granter")]
     public class InOutController : Controller
     {
         private readonly A2BBApiDbContext _dbContext;
@@ -30,13 +30,6 @@ namespace A2BBAPI.Controllers
             }
 
             if (!device.Enabled)
-            {
-                throw new RestReturnException(Constants.RestReturn.ERR_DEVICE_DISABLED);
-            }
-
-            var response = ClientUtils.GetRTClient(Constants.A2BB_API_RESOURCE_NAME, Constants.A2BB_API_RO_CLIENT_ID, device.RefreshToken);
-
-            if (response.IsError)
             {
                 throw new RestReturnException(Constants.RestReturn.ERR_DEVICE_DISABLED);
             }

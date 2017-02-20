@@ -17,7 +17,7 @@ namespace A2BBAPI.Controllers
     /// </summary>
     [Produces("application/json")]
     [Route("api/link")]
-    [Authorize]
+    [Authorize("User")]
     public class LinkDeviceController : Controller
     {
         #region Private fields
@@ -100,7 +100,6 @@ namespace A2BBAPI.Controllers
                 _dbContext.Subject.Add(sub);
             }
 
-            link.Device.RefreshToken = response.RefreshToken;
             sub.Device.Add(link.Device);
             _dbContext.SaveChanges();
 

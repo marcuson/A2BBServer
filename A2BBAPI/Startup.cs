@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace A2BBAPI
 {
@@ -37,11 +38,17 @@ namespace A2BBAPI
                 .RequireClaim("sub")
                 .Build();
 
+            var authGranterPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireAssertion(h => h.User.Claims.FirstOrDefault(c => c.Type == "sub") == null)
+                .Build();
+
             services.AddMemoryCache();
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(new AuthorizeFilter(authUserPolicy));
-            });
+            services.AddMvc();
+
+            services.AddAuthorization(options => options.AddPolicy("User", authUserPolicy));
+            services.AddAuthorization(options => options.AddPolicy("Granter", authGranterPolicy));
+
             services.AddCors();
         }
 
