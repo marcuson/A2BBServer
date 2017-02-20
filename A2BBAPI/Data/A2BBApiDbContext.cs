@@ -5,20 +5,33 @@ using A2BBAPI.Models;
 
 namespace A2BBAPI.Data
 {
+    /// <summary>
+    /// The A2BB API DB context.
+    /// </summary>
     public partial class A2BBApiDbContext : DbContext
     {
+        #region Public properties
+        /// <summary>
+        /// The devices in the DB.
+        /// </summary>
         public virtual DbSet<Device> Device { get; set; }
+
+        /// <summary>
+        /// The in/out records in the DB.
+        /// </summary>
         public virtual DbSet<InOut> InOut { get; set; }
+
+        /// <summary>
+        /// The subjects (users) in the DB.
+        /// </summary>
         public virtual DbSet<Subject> Subject { get; set; }
+        #endregion
 
-        public A2BBApiDbContext(DbContextOptions<A2BBApiDbContext> options) : base(options)
-        {
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-        }
-
+        #region Private methods
+        /// <summary>
+        /// Called before model creation.
+        /// </summary>
+        /// <param name="builder">The model builder.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Device>(entity =>
@@ -72,5 +85,16 @@ namespace A2BBAPI.Data
                 entity.Property(e => e.Id).HasColumnName("id");
             });
         }
+        #endregion
+
+        #region Public methods
+        /// <summary>
+        /// Create a new instance of this class.
+        /// </summary>
+        /// <param name="options">The DB context builder options.</param>
+        public A2BBApiDbContext(DbContextOptions<A2BBApiDbContext> options) : base(options)
+        {
+        }
+        #endregion
     }
 }

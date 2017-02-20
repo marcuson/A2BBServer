@@ -12,14 +12,32 @@ using System;
 
 namespace A2BBAPI.Controllers
 {
+    /// <summary>
+    /// Controller user by HW granters to record in/out actions.
+    /// </summary>
     [Produces("application/json")]
     [Route("api")]
     [Authorize("Granter")]
     public class InOutController : Controller
     {
+        #region Private fields
+        /// <summary>
+        /// The DB context.
+        /// </summary>
         private readonly A2BBApiDbContext _dbContext;
-        private readonly ILogger _logger;
 
+        /// <summary>
+        /// The logger.
+        /// </summary>
+        private readonly ILogger _logger;
+        #endregion
+
+        #region Private methods
+        /// <summary>
+        /// Check if device is authorized or not by its id.
+        /// </summary>
+        /// <param name="deviceId">The id of the device to check.</param>
+        /// <returns>The device with the given id, if authorized.</returns>
         private Device CheckDeviceId(int deviceId)
         {
             var device = _dbContext.Device.FirstOrDefault(d => d.Id == deviceId);
@@ -36,13 +54,25 @@ namespace A2BBAPI.Controllers
 
             return device;
         }
+        #endregion
 
+        #region Public methods
+        /// <summary>
+        /// Create a new instance of this class.
+        /// </summary>
+        /// <param name="dbContext">The DI DB context.</param>
+        /// <param name="loggerFactory">The DI logger factory.</param>
         public InOutController(A2BBApiDbContext dbContext, ILoggerFactory loggerFactory)
         {
             _dbContext = dbContext;
             _logger = loggerFactory.CreateLogger<MeController>();
         }
         
+        /// <summary>
+        /// Register in action.
+        /// </summary>
+        /// <param name="deviceId">The id of the device which performs this action.</param>
+        /// <returns><c>True</c> if ok, <c>false</c> otherwise.</returns>
         [HttpPost]
         [Route("in/{deviceId}")]
         public ResponseWrapper<string> In([FromRoute] int deviceId)
@@ -71,6 +101,11 @@ namespace A2BBAPI.Controllers
             return new ResponseWrapper<string>("In " + deviceId, Constants.RestReturn.OK);
         }
 
+        /// <summary>
+        /// Register out action.
+        /// </summary>
+        /// <param name="deviceId">The id of the device which performs this action.</param>
+        /// <returns><c>True</c> if ok, <c>false</c> otherwise.</returns>
         [HttpPost]
         [Route("out/{deviceId}")]
         public ResponseWrapper<string> Out([FromRoute] int deviceId)
@@ -98,5 +133,6 @@ namespace A2BBAPI.Controllers
 
             return new ResponseWrapper<string>("Out " + deviceId, Constants.RestReturn.OK);
         }
+        #endregion
     }
 }

@@ -18,7 +18,7 @@ using Microsoft.Extensions.Caching.Memory;
 namespace A2BBAPI.Controllers
 {
     /// <summary>
-    /// Controller to manage user devices.
+    /// Controller to manage user in/out actions.
     /// </summary>
     [Produces("application/json")]
     [Route("api/me/inout")]
@@ -49,13 +49,20 @@ namespace A2BBAPI.Controllers
             _logger = loggerFactory.CreateLogger<MeController>();
         }
 
-        
+        /// <summary>
+        /// Get a list of in/out actions associated to this user.
+        /// </summary>
+        /// <returns>A list of in/out actions associated to this user.</returns>
         [HttpGet]
         public ResponseWrapper<IEnumerable<InOut>> ListAll()
         {
             return new ResponseWrapper<IEnumerable<InOut>>(_dbContext.InOut.Where(io => io.Device.UserId == User.Claims.FirstOrDefault(c => c.Type == "sub").Value), Constants.RestReturn.OK);
         }
 
+        /// <summary>
+        /// Get a list of in/out actions associated to this user, filtered by device id.
+        /// </summary>
+        /// <returns>A list of in/out actions associated to this user, filtered by device id.</returns>
         [HttpGet]
         [Route("{deviceId}")]
         public ResponseWrapper<IEnumerable<InOut>> ListOfSpecificDevice([FromRoute] int deviceId)
