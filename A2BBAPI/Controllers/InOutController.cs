@@ -74,7 +74,7 @@ namespace A2BBAPI.Controllers
         /// <returns><c>True</c> if ok, <c>false</c> otherwise.</returns>
         [HttpPost]
         [Route("in/{deviceId}")]
-        public ResponseWrapper<string> In([FromRoute] int deviceId)
+        public ResponseWrapper<bool> In([FromRoute] int deviceId)
         {
             Device device;
 
@@ -84,7 +84,7 @@ namespace A2BBAPI.Controllers
             }
             catch (RestReturnException e)
             {
-                return new ResponseWrapper<string>(e.Value);
+                return new ResponseWrapper<bool>(false, e.Value);
             }
 
             var inObj = new InOut
@@ -97,7 +97,7 @@ namespace A2BBAPI.Controllers
             _dbContext.InOut.Add(inObj);
             _dbContext.SaveChanges();
 
-            return new ResponseWrapper<string>("In " + deviceId, Constants.RestReturn.OK);
+            return new ResponseWrapper<bool>(false, Constants.RestReturn.OK);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace A2BBAPI.Controllers
         /// <returns><c>True</c> if ok, <c>false</c> otherwise.</returns>
         [HttpPost]
         [Route("out/{deviceId}")]
-        public ResponseWrapper<string> Out([FromRoute] int deviceId)
+        public ResponseWrapper<bool> Out([FromRoute] int deviceId)
         {
             Device device;
 
@@ -117,7 +117,7 @@ namespace A2BBAPI.Controllers
             }
             catch (RestReturnException e)
             {
-                return new ResponseWrapper<string>(e.Value);
+                return new ResponseWrapper<bool>(false, e.Value);
             }
 
             var inObj = new InOut
@@ -130,7 +130,7 @@ namespace A2BBAPI.Controllers
             _dbContext.InOut.Add(inObj);
             _dbContext.SaveChanges();
 
-            return new ResponseWrapper<string>("Out " + deviceId, Constants.RestReturn.OK);
+            return new ResponseWrapper<bool>(false, Constants.RestReturn.OK);
         }
         #endregion
     }
