@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using A2BBIdentityServer.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using A2BBCommon.Models;
-using A2BBIdentityServer.Models;
 
 namespace A2BBIdentityServer.Data
 {
@@ -10,16 +9,7 @@ namespace A2BBIdentityServer.Data
     /// </summary>
     public class A2BBIdSrvDbContext : IdentityDbContext<User>
     {
-        #region Public methods
-        /// <summary>
-        /// Create a new instance of this class.
-        /// </summary>
-        /// <param name="options">The DB context builder options.</param>
-        public A2BBIdSrvDbContext(DbContextOptions<A2BBIdSrvDbContext> options)
-            : base(options)
-        {
-        }
-
+        #region Private methods
         /// <summary>
         /// Called before model creation.
         /// </summary>
@@ -30,6 +20,17 @@ namespace A2BBIdentityServer.Data
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
+        }
+        #endregion
+
+        #region Public methods
+        /// <summary>
+        /// Create a new instance of this class.
+        /// </summary>
+        /// <param name="options">The DB context builder options.</param>
+        public A2BBIdSrvDbContext(DbContextOptions<A2BBIdSrvDbContext> options)
+            : base(options)
+        {
         }
         #endregion
     }

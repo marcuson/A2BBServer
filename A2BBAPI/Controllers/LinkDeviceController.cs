@@ -1,9 +1,8 @@
 ﻿using A2BBAPI.Data;
-using A2BBAPI.DTO;
 using A2BBAPI.Models;
 using A2BBAPI.Utils;
 using A2BBCommon;
-using A2BBCommon.Models;
+using A2BBCommon.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -17,7 +16,7 @@ namespace A2BBAPI.Controllers
     /// </summary>
     [Produces("application/json")]
     [Route("api/link")]
-    [Authorize]
+    [Authorize("User")]
     public class LinkDeviceController : Controller
     {
         #region Private fields
@@ -86,7 +85,7 @@ namespace A2BBAPI.Controllers
                 return new ResponseWrapper<Device>(Constants.RestReturn.ERR_LINK);
             }
 
-            var response = ClientUtils.GetROClient(Constants.A2BB_API_RESOURCE_NAME + " offline_access", Constants.A2BB_API_RO_CLIENT_ID, link.Username, link.Password);
+            var response = ClientUtils.GetROClient(Constants.A2BB_API_RESOURCE_NAME, Constants.A2BB_API_RO_CLIENT_ID, link.Username, link.Password);
 
             if (response.IsError)
             {
@@ -100,7 +99,6 @@ namespace A2BBAPI.Controllers
                 _dbContext.Subject.Add(sub);
             }
 
-            link.Device.RefreshToken = response.RefreshToken;
             sub.Device.Add(link.Device);
             _dbContext.SaveChanges();
 

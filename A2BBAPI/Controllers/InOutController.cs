@@ -1,25 +1,42 @@
-using Microsoft.AspNetCore.Mvc;
-using A2BBCommon.Models;
-using A2BBCommon;
 using A2BBAPI.Data;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authorization;
-using A2BBAPI.Utils;
-using System.Linq;
 using A2BBAPI.Models;
-using static A2BBAPI.Models.InOut;
+using A2BBCommon;
+using A2BBCommon.DTO;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
+using static A2BBAPI.Models.InOut;
 
 namespace A2BBAPI.Controllers
 {
+    /// <summary>
+    /// Controller user by HW granters to record in/out actions.
+    /// </summary>
     [Produces("application/json")]
     [Route("api")]
-    [AllowAnonymous]
+    [Authorize("Granter")]
     public class InOutController : Controller
     {
+        #region Private fields
+        /// <summary>
+        /// The DB context.
+        /// </summary>
         private readonly A2BBApiDbContext _dbContext;
-        private readonly ILogger _logger;
 
+        /// <summary>
+        /// The logger.
+        /// </summary>
+        private readonly ILogger _logger;
+        #endregion
+
+        #region Private methods
+        /// <summary>
+        /// Check if device is authorized or not by its id.
+        /// </summary>
+        /// <param name="deviceId">The id of the device to check.</param>
+        /// <returns>The device with the given id, if authorized.</returns>
         private Device CheckDeviceId(int deviceId)
         {
             var device = _dbContext.Device.FirstOrDefault(d => d.Id == deviceId);
@@ -34,25 +51,30 @@ namespace A2BBAPI.Controllers
                 throw new RestReturnException(Constants.RestReturn.ERR_DEVICE_DISABLED);
             }
 
-            var response = ClientUtils.GetRTClient(Constants.A2BB_API_RESOURCE_NAME, Constants.A2BB_API_RO_CLIENT_ID, device.RefreshToken);
-
-            if (response.IsError)
-            {
-                throw new RestReturnException(Constants.RestReturn.ERR_DEVICE_DISABLED);
-            }
-
             return device;
         }
+        #endregion
 
+        #region Public methods
+        /// <summary>
+        /// Create a new instance of this class.
+        /// </summary>
+        /// <param name="dbContext">The DI DB context.</param>
+        /// <param name="loggerFactory">The DI logger factory.</param>
         public InOutController(A2BBApiDbContext dbContext, ILoggerFactory loggerFactory)
         {
             _dbContext = dbContext;
             _logger = loggerFactory.CreateLogger<MeController>();
         }
         
+        /// <summary>
+        /// Register in action.
+        /// </summary>
+        /// <param name="deviceId">The id of the device which performs this action.</param>
+        /// <returns><c>True</c> if ok, <c>false</c> otherwise.</returns>
         [HttpPost]
         [Route("in/{deviceId}")]
-        public ResponseWrapper<string> In([FromRoute] int deviceId)
+        public ResponseWrapper<bool> In([FromRoute] int deviceId)
         {
             Device device;
 
@@ -62,7 +84,7 @@ namespace A2BBAPI.Controllers
             }
             catch (RestReturnException e)
             {
-                return new ResponseWrapper<string>(e.Value);
+                return new ResponseWrapper<bool>(false, e.Value);
             }
 
             var inObj = new InOut
@@ -75,12 +97,17 @@ namespace A2BBAPI.Controllers
             _dbContext.InOut.Add(inObj);
             _dbContext.SaveChanges();
 
-            return new ResponseWrapper<string>("In " + deviceId, Constants.RestReturn.OK);
+            return new ResponseWrapper<bool>(false, Constants.RestReturn.OK);
         }
 
+        /// <summary>
+        /// Register out action.
+        /// </summary>
+        /// <param name="deviceId">The id of the device which performs this action.</param>
+        /// <returns><c>True</c> if ok, <c>false</c> otherwise.</returns>
         [HttpPost]
         [Route("out/{deviceId}")]
-        public ResponseWrapper<string> Out([FromRoute] int deviceId)
+        public ResponseWrapper<bool> Out([FromRoute] int deviceId)
         {
             Device device;
 
@@ -90,7 +117,7 @@ namespace A2BBAPI.Controllers
             }
             catch (RestReturnException e)
             {
-                return new ResponseWrapper<string>(e.Value);
+                return new ResponseWrapper<bool>(false, e.Value);
             }
 
             var inObj = new InOut
@@ -103,7 +130,8 @@ namespace A2BBAPI.Controllers
             _dbContext.InOut.Add(inObj);
             _dbContext.SaveChanges();
 
-            return new ResponseWrapper<string>("Out " + deviceId, Constants.RestReturn.OK);
+            return new ResponseWrapper<bool>(false, Constants.RestReturn.OK);
         }
+        #endregion
     }
 }
