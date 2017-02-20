@@ -122,7 +122,7 @@ namespace A2BBAPI.Controllers
 
             var inObj = new InOut
             {
-                Type = InOutType.In,
+                Type = InOutType.Out,
                 Device = device,
                 OnDate = DateTime.Now
             };
