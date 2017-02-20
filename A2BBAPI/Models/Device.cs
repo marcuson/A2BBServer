@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 namespace A2BBAPI.Models
 {
-    [JsonObject(IsReference = true)]
     /// <summary>
     /// Device POCO.
     /// </summary>
+    [JsonObject(IsReference = false)]
     public partial class Device
     {
         #region Public properties
