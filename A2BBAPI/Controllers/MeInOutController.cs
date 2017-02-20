@@ -1,19 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using A2BBCommon.Models;
-using A2BBCommon;
-using A2BBAPI.Data;
-using IdentityModel.Client;
-using A2BBAPI.DTO;
-using Microsoft.Extensions.Logging;
+﻿using A2BBAPI.Data;
 using A2BBAPI.Models;
+using A2BBCommon;
+using A2BBCommon.DTO;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using A2BBAPI.Utils;
-using static A2BBAPI.Utils.ClaimsUtils;
-using Microsoft.Extensions.Caching.Memory;
+using System.Linq;
 
 namespace A2BBAPI.Controllers
 {

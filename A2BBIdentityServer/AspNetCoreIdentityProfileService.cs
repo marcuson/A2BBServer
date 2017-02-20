@@ -1,13 +1,9 @@
-﻿using A2BBCommon.Models;
-using A2BBIdentityServer.Models;
+﻿using A2BBIdentityServer.Models;
 using IdentityModel;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;

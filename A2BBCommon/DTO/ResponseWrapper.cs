@@ -1,6 +1,6 @@
 ﻿using A2BBCommon;
 
-namespace A2BBCommon.Models
+namespace A2BBCommon.DTO
 {
     /// <summary>
     /// A wrapper for REST responses.

@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using A2BBIdentityServer.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using A2BBCommon.Models;
-using A2BBIdentityServer.Models;
 
 namespace A2BBIdentityServer.Data
 {

@@ -1,9 +1,8 @@
 ﻿using A2BBAPI.Data;
-using A2BBAPI.DTO;
 using A2BBAPI.Models;
 using A2BBAPI.Utils;
 using A2BBCommon;
-using A2BBCommon.Models;
+using A2BBCommon.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;

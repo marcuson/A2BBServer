@@ -1,14 +1,13 @@
-using Microsoft.AspNetCore.Mvc;
-using A2BBCommon.Models;
-using A2BBCommon;
 using A2BBAPI.Data;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authorization;
-using A2BBAPI.Utils;
-using System.Linq;
 using A2BBAPI.Models;
-using static A2BBAPI.Models.InOut;
+using A2BBCommon;
+using A2BBCommon.DTO;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
+using static A2BBAPI.Models.InOut;
 
 namespace A2BBAPI.Controllers
 {

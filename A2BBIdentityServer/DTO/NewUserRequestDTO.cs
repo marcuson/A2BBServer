@@ -1,5 +1,4 @@
-﻿using A2BBCommon.Models;
-using A2BBIdentityServer.Models;
+﻿using A2BBIdentityServer.Models;
 using System;
 
 namespace A2BBIdentityServer.DTO
