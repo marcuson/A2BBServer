@@ -13,7 +13,6 @@ namespace A2BBAPI.Models
         }
 
         public int Id { get; set; }
-        public string RefreshToken { get; set; }
         public string UserId { get; set; }
         public bool Enabled { get; set; }
         public string Name { get; set; }

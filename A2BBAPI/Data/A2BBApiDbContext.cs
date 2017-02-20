@@ -33,8 +33,6 @@ namespace A2BBAPI.Data
                     .IsRequired()
                     .HasColumnName("name");
 
-                entity.Property(e => e.RefreshToken).HasColumnName("refresh_token");
-
                 entity.Property(e => e.UserId)
                     .IsRequired()
                     .HasColumnName("user_id");
