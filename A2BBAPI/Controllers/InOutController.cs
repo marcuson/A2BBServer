@@ -97,7 +97,7 @@ namespace A2BBAPI.Controllers
             _dbContext.InOut.Add(inObj);
             _dbContext.SaveChanges();
 
-            return new ResponseWrapper<bool>(false, Constants.RestReturn.OK);
+            return new ResponseWrapper<bool>(true, Constants.RestReturn.OK);
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace A2BBAPI.Controllers
             _dbContext.InOut.Add(inObj);
             _dbContext.SaveChanges();
 
-            return new ResponseWrapper<bool>(false, Constants.RestReturn.OK);
+            return new ResponseWrapper<bool>(true, Constants.RestReturn.OK);
         }
         #endregion
     }
