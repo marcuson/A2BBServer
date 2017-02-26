@@ -12,7 +12,7 @@ using static A2BBAPI.Models.InOut;
 namespace A2BBAPI.Controllers
 {
     /// <summary>
-    /// Controller user by HW granters to record in/out actions.
+    /// Controller to test that API server is up and running.
     /// </summary>
     [Produces("application/json")]
     [Route("api/ping")]
@@ -44,11 +44,9 @@ namespace A2BBAPI.Controllers
         }
         
         /// <summary>
-        /// Register in action.
+        /// Ping this server.
         /// </summary>
-        /// <param name="deviceId">The id of the device which performs this action.</param>
-        /// <param name="subId">The subject id linked to the granter.</param>
-        /// <returns><c>True</c> if ok, <c>false</c> otherwise.</returns>
+        /// <returns>A successfull response if API server is up and running.</returns>
         [HttpGet]
         public ResponseWrapper<bool> Ping()
         {

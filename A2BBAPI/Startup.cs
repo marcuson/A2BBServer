@@ -49,6 +49,7 @@ namespace A2BBAPI
             services.AddDbContext<A2BBApiDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("A2BBApiConnection")));
 
+            // Custom authorization policies
             var authUserPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .RequireClaim("sub")
@@ -79,8 +80,10 @@ namespace A2BBAPI
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            // CORS configuration: allow all (you can be more restrictive if you want!)
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
+            // Use authentication via identity server (could be hosted in another machine)
             app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
             {
                 Authority = Constants.IDENTITY_SERVER_ENDPOINT,

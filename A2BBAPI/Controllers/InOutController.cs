@@ -12,7 +12,7 @@ using static A2BBAPI.Models.InOut;
 namespace A2BBAPI.Controllers
 {
     /// <summary>
-    /// Controller user by HW granters to record in/out actions.
+    /// Controller used by HW granters to record in/out actions.
     /// </summary>
     [Produces("application/json")]
     [Route("api")]

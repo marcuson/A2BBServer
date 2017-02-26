@@ -57,7 +57,7 @@ namespace A2BBAPI.Controllers
         /// <summary>
         /// Get all devices associated to currently authorized user.
         /// </summary>
-        /// <returns>The list of device belonging to the current user.</returns>
+        /// <returns>The list of device associated to the current user.</returns>
         [HttpGet]
         public ResponseWrapper<IEnumerable<Device>> ListDevices()
         {
@@ -109,7 +109,7 @@ namespace A2BBAPI.Controllers
         /// <summary>
         /// Get a device associated to currently authorized user.
         /// </summary>
-        /// <returns>The device belonging to the current user.</returns>
+        /// <returns>The device associated to the current user.</returns>
         [HttpGet]
         [Route("{deviceId}")]
         public ResponseWrapper<Device> GetDevice([FromRoute] int deviceId)

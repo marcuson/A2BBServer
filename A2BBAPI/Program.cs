@@ -18,7 +18,7 @@ namespace A2BBAPI
         /// <summary>
         /// Main entry point of the application.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">The command line arguments.</param>
         public static void Main(string[] args)
         {
             var host = new WebHostBuilder()

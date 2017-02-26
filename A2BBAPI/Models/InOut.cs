@@ -10,7 +10,7 @@ namespace A2BBAPI.Models
     {
         #region Public static fields
         /// <summary>
-        /// Type of record (in or out)
+        /// Type of record (in or out).
         /// </summary>
         public enum InOutType
         {
