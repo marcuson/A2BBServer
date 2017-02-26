@@ -3,7 +3,7 @@
 namespace A2BBCommon
 {
     /// <summary>
-    /// Exception which can be easily interpretable for JSON response.
+    /// Exception easily interpretable as JSON response.
     /// </summary>
     public class RestReturnException : Exception
     {

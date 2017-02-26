@@ -1,7 +1,7 @@
 ﻿namespace A2BBCommon
 {
     /// <summary>
-    /// Constants shared among Identity Server and API.
+    /// Constants shared among Identity Server and actual A2BB API.
     /// </summary>
     public static class Constants
     {
@@ -27,17 +27,17 @@
         public const string A2BB_API_CC_CLIENT_ID = "a2bb.cc_api";
 
         /// <summary>
-        /// The client secret for A2BB API.
+        /// The client secret for A2BB API (for client flow).
         /// </summary>
         public const string A2BB_API_CC_CLIENT_SECRET = "a2bb.cc_api_secret";
 
         /// <summary>
-        /// The client id for A2BB Identity Server (resource owner).
+        /// The client id for A2BB Identity Server (for resource onwer/pass flow).
         /// </summary>
         public const string A2BB_IDSRV_RO_CLIENT_ID = "a2bb.ro_id_srv";
 
         /// <summary>
-        /// Name of IdSrv API resource.
+        /// Name of identity server API resource.
         /// </summary>
         public const string A2BB_IDSRV_RESOURCE_NAME = "IDSRV_API";
 

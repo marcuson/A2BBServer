@@ -5,7 +5,7 @@ namespace A2BBCommon.DTO
     /// <summary>
     /// A wrapper for REST responses.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The type of the object to be returned as actual response in case of success.</typeparam>
     public class ResponseWrapper<T>
     {
         #region Public properties
@@ -15,7 +15,7 @@ namespace A2BBCommon.DTO
         public uint Code { get; set; }
 
         /// <summary>
-        /// The return message. If <see cref="Status"/> is not <c>"OK"</c>, here we can find a description of the error.
+        /// The return message. If <see cref="Code"/> is not <c>0</c>, here we can find a description of the error.
         /// </summary>
         public string Message { get; set; }
 
@@ -27,7 +27,7 @@ namespace A2BBCommon.DTO
 
         #region Public methods
         /// <summary>
-        /// Default constructor, used for JSOn deserialization.
+        /// Default constructor, used for JSON deserialization.
         /// </summary>
         private ResponseWrapper()
         {
@@ -37,7 +37,10 @@ namespace A2BBCommon.DTO
         /// Create a new instance of this class.
         /// </summary>
         /// <param name="payload">The actual payload.</param>
-        /// <param name="restReturn">The Rest return from which we retrieve the code and message.</param>
+        /// <param name="restReturn">
+        /// The enum value from which we retrieve the code and message. If <c>null</c> is passed,
+        /// it will be interpreted as a successfull return code. Default is <c>null</c>.
+        /// </param>
         public ResponseWrapper(T payload, Constants.RestReturn? restReturn = null)
         {
             Constants.RestReturn actRet = restReturn != null ? restReturn.Value : Constants.RestReturn.OK;
@@ -49,7 +52,7 @@ namespace A2BBCommon.DTO
         /// <summary>
         /// Create a new instance of this class with <c>null</c> payload.
         /// </summary>
-        /// <param name="restReturn">The Rest return from which we retrieve the code and message.</param>
+        /// <param name="restReturn">The enum value from which we retrieve the code and message.</param>
         public ResponseWrapper(Constants.RestReturn restReturn) : this(default(T), restReturn)
         {
         }
