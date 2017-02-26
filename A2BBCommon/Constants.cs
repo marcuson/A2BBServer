@@ -63,6 +63,7 @@
             ERR_LINK,
             ERR_DEVICE_NOT_FOUND,
             ERR_DEVICE_DISABLED,
+            ERR_INVALID_GRANTER,
             ERR_UNKNOWN
         }
         #endregion
@@ -107,6 +108,8 @@
                     return 0x0000000A;
                 case Constants.RestReturn.ERR_DEVICE_DISABLED:
                     return 0x0000000B;
+                case Constants.RestReturn.ERR_INVALID_GRANTER:
+                    return 0x0000000C;
                 default:
                     return 0xFFFFFFFF;
             }
@@ -145,6 +148,8 @@
                     return "Error device not found";
                 case Constants.RestReturn.ERR_DEVICE_DISABLED:
                     return "Error device disabled";
+                case Constants.RestReturn.ERR_INVALID_GRANTER:
+                    return "Error invalid granter";
                 default:
                     return "Unknown erorr";
             }
