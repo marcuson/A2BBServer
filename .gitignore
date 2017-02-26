@@ -277,3 +277,4 @@ __pycache__/
 # tools/**
 # !tools/packages.config
 Starter/res/
+Starter/nginx/logs/nginx.pid
