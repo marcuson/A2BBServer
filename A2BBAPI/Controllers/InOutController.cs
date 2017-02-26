@@ -79,7 +79,7 @@ namespace A2BBAPI.Controllers
         /// <param name="deviceId">The id of the device which performs this action.</param>
         /// <param name="subId">The subject id linked to the granter.</param>
         /// <returns><c>True</c> if ok, <c>false</c> otherwise.</returns>
-        [HttpPost]
+        [HttpGet]
         [Route("in/{deviceId}/{subId}")]
         public ResponseWrapper<bool> In([FromRoute] int deviceId, [FromRoute] string subId)
         {
@@ -113,7 +113,7 @@ namespace A2BBAPI.Controllers
         /// <param name="deviceId">The id of the device which performs this action.</param>
         /// <param name="subId">The subject id linked to the granter.</param>
         /// <returns><c>True</c> if ok, <c>false</c> otherwise.</returns>
-        [HttpPost]
+        [HttpGet]
         [Route("out/{deviceId}/{subId}")]
         public ResponseWrapper<bool> Out([FromRoute] int deviceId, [FromRoute] string subId)
         {
