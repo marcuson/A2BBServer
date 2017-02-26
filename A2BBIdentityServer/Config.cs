@@ -85,7 +85,7 @@ namespace A2BBIdentityServer
                     AccessTokenLifetime = 60,
                     AccessTokenType = AccessTokenType.Jwt,
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    AllowedCorsOrigins = { "*", "http://localhost:4200" },
+                    AllowedCorsOrigins = { "*", "http://localhost:4200" }, // Allow origins for browser CORS as needed!
                     AllowOfflineAccess = true,
                     AllowedScopes =
                     {
@@ -109,7 +109,7 @@ namespace A2BBIdentityServer
                     AccessTokenLifetime = 60,
                     AccessTokenType = AccessTokenType.Jwt,
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    AllowedCorsOrigins = { "*", "http://localhost:4200" },
+                    AllowedCorsOrigins = { "*", "http://localhost:4200" }, // Allow origins for browser CORS as needed!
                     AllowOfflineAccess = true,
                     AllowedScopes =
                     {
@@ -137,7 +137,7 @@ namespace A2BBIdentityServer
                     AccessTokenLifetime = 60,
                     AccessTokenType = AccessTokenType.Jwt,
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedCorsOrigins = { "*", "http://localhost:4200" },
+                    AllowedCorsOrigins = { "*", "http://localhost:4200" }, // Allow origins for browser CORS as needed!
                     AllowOfflineAccess = false,
                     AllowedScopes =
                     {

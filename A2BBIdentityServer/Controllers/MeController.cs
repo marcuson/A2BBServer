@@ -50,9 +50,9 @@ namespace A2BBIdentityServer.Controllers
         }
 
         /// <summary>
-        /// List all users.
+        /// Get info about the currently authenticated user.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The POCO about user currently authenticated.</returns>
         [HttpGet]
         public User GetInfo()
         {

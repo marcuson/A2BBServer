@@ -67,7 +67,7 @@ namespace A2BBIdentityServer
             services.AddTransient<IProfileService, AspNetCoreIdentityProfileService>();
 
             // NOTE: In production, there are more flexible implementations than in-memory providers!
-            // IMPORTANT: In production, do not use temporary signing but a valid certificate!
+            // IMPORTANT: In production, do not use temporary signing credentials but a valid certificate!
             services.AddIdentityServer()
                 .AddTemporarySigningCredential()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
@@ -88,6 +88,7 @@ namespace A2BBIdentityServer
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            // Allow all CORS for REST API (you can be more restrictive here if you want)
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             if (env.IsDevelopment())
@@ -96,8 +97,8 @@ namespace A2BBIdentityServer
                 app.UseDatabaseErrorPage();
             }
 
+            // Add middlewares for authentication
             app.UseIdentity();
-            
             app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
             {
                 Authority = Constants.IDENTITY_SERVER_ENDPOINT,
