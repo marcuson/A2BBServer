@@ -36,9 +36,9 @@ namespace A2BBAPI.Controllers
         /// Check if device is authorized or not by its id.
         /// </summary>
         /// <param name="deviceId">The id of the device to check.</param>
-        /// <param name="subId">The subject id linked to the granter.</param>
+        /// <param name="granterId">The granter id.</param>
         /// <returns>The device with the given id, if authorized.</returns>
-        private Device CheckDevice(int deviceId, string subId)
+        private Device CheckDevice(int deviceId, string granterId)
         {
             var device = _dbContext.Device.FirstOrDefault(d => d.Id == deviceId);
 
@@ -52,7 +52,7 @@ namespace A2BBAPI.Controllers
                 throw new RestReturnException(Constants.RestReturn.ERR_DEVICE_DISABLED);
             }
 
-            if (device.UserId != subId)
+            if (device.User == null || device.User.Granter == null || device.User.Granter.FirstOrDefault(g => g.Id == granterId) == null)
             {
                 throw new RestReturnException(Constants.RestReturn.ERR_INVALID_GRANTER);
             }
@@ -77,17 +77,17 @@ namespace A2BBAPI.Controllers
         /// Register in action.
         /// </summary>
         /// <param name="deviceId">The id of the device which performs this action.</param>
-        /// <param name="subId">The subject id linked to the granter.</param>
+        /// <param name="granterId">The granter id.</param>
         /// <returns><c>True</c> if ok, <c>false</c> otherwise.</returns>
         [HttpGet]
-        [Route("in/{deviceId}/{subId}")]
-        public ResponseWrapper<bool> In([FromRoute] int deviceId, [FromRoute] string subId)
+        [Route("in/{deviceId}/{granterId}")]
+        public ResponseWrapper<bool> In([FromRoute] int deviceId, [FromRoute] string granterId)
         {
             Device device;
 
             try
             {
-                device = CheckDevice(deviceId, subId);
+                device = CheckDevice(deviceId, granterId);
             }
             catch (RestReturnException e)
             {
@@ -111,17 +111,17 @@ namespace A2BBAPI.Controllers
         /// Register out action.
         /// </summary>
         /// <param name="deviceId">The id of the device which performs this action.</param>
-        /// <param name="subId">The subject id linked to the granter.</param>
+        /// <param name="granterId">The granter id.</param>
         /// <returns><c>True</c> if ok, <c>false</c> otherwise.</returns>
         [HttpGet]
-        [Route("out/{deviceId}/{subId}")]
-        public ResponseWrapper<bool> Out([FromRoute] int deviceId, [FromRoute] string subId)
+        [Route("out/{deviceId}/{granterId}")]
+        public ResponseWrapper<bool> Out([FromRoute] int deviceId, [FromRoute] string granterId)
         {
             Device device;
 
             try
             {
-                device = CheckDevice(deviceId, subId);
+                device = CheckDevice(deviceId, granterId);
             }
             catch (RestReturnException e)
             {
