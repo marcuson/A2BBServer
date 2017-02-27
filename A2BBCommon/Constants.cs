@@ -9,12 +9,12 @@
         /// <summary>
         /// The identity server endpoint.
         /// </summary>
-        public const string IDENTITY_SERVER_ENDPOINT = "http://localhost:5000";
+        public const string IDENTITY_SERVER_ENDPOINT = "http://192.168.1.138:5000";
 
         /// <summary>
         /// The API endpoint.
         /// </summary>
-        public const string API_ENDPOINT = "http://localhost:5001";
+        public const string API_ENDPOINT = "http://192.168.1.138:5001";
 
         /// <summary>
         /// The client id for A2BB API (for resource onwer/pass flow).
@@ -64,6 +64,7 @@
             ERR_DEVICE_NOT_FOUND,
             ERR_DEVICE_DISABLED,
             ERR_INVALID_GRANTER,
+            ERR_GRANTER_NOT_FOUND,
             ERR_UNKNOWN
         }
         #endregion
@@ -110,6 +111,8 @@
                     return 0x0000000B;
                 case Constants.RestReturn.ERR_INVALID_GRANTER:
                     return 0x0000000C;
+                case Constants.RestReturn.ERR_GRANTER_NOT_FOUND:
+                    return 0x0000000D;
                 default:
                     return 0xFFFFFFFF;
             }
@@ -150,6 +153,8 @@
                     return "Error device disabled";
                 case Constants.RestReturn.ERR_INVALID_GRANTER:
                     return "Error invalid granter";
+                case Constants.RestReturn.ERR_GRANTER_NOT_FOUND:
+                    return "Error granter not found";
                 default:
                     return "Unknown erorr";
             }
