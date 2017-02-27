@@ -20,7 +20,10 @@ namespace A2BBAPI.Utils
         /// <returns>A token response.</returns>
         public static TokenResponse GetROClient(string scope, string clientId, string username, string password)
         {
-            var disco = DiscoveryClient.GetAsync(Constants.IDENTITY_SERVER_ENDPOINT).Result;
+            var discoClient = new DiscoveryClient(Constants.IDENTITY_SERVER_ENDPOINT);
+            discoClient.Policy.RequireHttps = false; // Do not user in production!
+
+            var disco = discoClient.GetAsync().Result;
             var client = new TokenClient(disco.TokenEndpoint);
             return client.RequestResourceOwnerPasswordAsync(username, password, scope, new Dictionary<string, string> {
                 { "client_id", clientId }
@@ -36,7 +39,10 @@ namespace A2BBAPI.Utils
         /// <returns>A token response.</returns>
         public static TokenResponse GetCCClient(string scope, string clientId, string secret)
         {
-            var disco = DiscoveryClient.GetAsync(Constants.IDENTITY_SERVER_ENDPOINT).Result;
+            var discoClient = new DiscoveryClient(Constants.IDENTITY_SERVER_ENDPOINT);
+            discoClient.Policy.RequireHttps = false; // Do not user in production!
+
+            var disco = discoClient.GetAsync().Result;
             var client = new TokenClient(disco.TokenEndpoint);
             return client.RequestClientCredentialsAsync(scope, new Dictionary<string, string> {
                 { "client_id", clientId },
@@ -53,7 +59,10 @@ namespace A2BBAPI.Utils
         /// <returns>A token response.</returns>
         public static TokenResponse GetRTClient(string scope, string clientId, string refreshToken)
         {
-            var disco = DiscoveryClient.GetAsync(Constants.IDENTITY_SERVER_ENDPOINT).Result;
+            var discoClient = new DiscoveryClient(Constants.IDENTITY_SERVER_ENDPOINT);
+            discoClient.Policy.RequireHttps = false; // Do not user in production!
+
+            var disco = discoClient.GetAsync().Result;
             var client = new TokenClient(disco.TokenEndpoint);
             return client.RequestRefreshTokenAsync(refreshToken, new Dictionary<string, string> {
                 { "client_id", clientId }
