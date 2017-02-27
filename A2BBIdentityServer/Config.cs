@@ -92,7 +92,8 @@ namespace A2BBIdentityServer
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        Constants.A2BB_IDSRV_RESOURCE_NAME
+                        Constants.A2BB_IDSRV_RESOURCE_NAME,
+                        Constants.A2BB_API_RESOURCE_NAME
                     },
                     RequireClientSecret = false,
                     RequireConsent = false,
