@@ -21,6 +21,12 @@ namespace A2BBAPI.Models
         /// </summary>
         [JsonIgnore]
         public virtual ICollection<Device> Device { get; set; }
+
+        /// <summary>
+        /// List of granters linked to this subject.
+        /// </summary>
+        [JsonIgnore]
+        public virtual ICollection<Granter> Granter { get; set; }
         #endregion
 
         #region Public methods
@@ -30,6 +36,7 @@ namespace A2BBAPI.Models
         public Subject()
         {
             Device = new HashSet<Device>();
+            Granter = new HashSet<Granter>();
         }
         #endregion
     }

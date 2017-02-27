@@ -16,6 +16,11 @@ namespace A2BBAPI.Data
         public virtual DbSet<Device> Device { get; set; }
 
         /// <summary>
+        /// The granters in the DB.
+        /// </summary>
+        public virtual DbSet<Granter> Granter { get; set; }
+
+        /// <summary>
         /// The in/out records in the DB.
         /// </summary>
         public virtual DbSet<InOut> InOut { get; set; }
@@ -54,6 +59,22 @@ namespace A2BBAPI.Data
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("device_subject_fk");
+            });
+
+            modelBuilder.Entity<Granter>(entity =>
+            {
+                entity.ToTable("granter", "a2bb_api");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.SubId)
+                    .HasColumnName("sub_id");
+
+                entity.HasOne(d => d.Sub)
+                    .WithMany(p => p.Granter)
+                    .HasForeignKey(d => d.SubId)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("granter_subject_fk");
             });
 
             modelBuilder.Entity<InOut>(entity =>
