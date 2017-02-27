@@ -55,6 +55,12 @@ namespace A2BBAPI
                 .RequireClaim("sub")
                 .Build();
 
+            var authAdminPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireClaim("sub")
+                .RequireAssertion(h => h.User.IsInRole("Admin"))
+                .Build();
+
             var authGranterPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .RequireAssertion(h => h.User.Claims.FirstOrDefault(c => c.Type == "sub") == null)
@@ -64,6 +70,7 @@ namespace A2BBAPI
             services.AddMvc();
 
             services.AddAuthorization(options => options.AddPolicy("User", authUserPolicy));
+            services.AddAuthorization(options => options.AddPolicy("Admin", authAdminPolicy));
             services.AddAuthorization(options => options.AddPolicy("Granter", authGranterPolicy));
 
             services.AddCors();
