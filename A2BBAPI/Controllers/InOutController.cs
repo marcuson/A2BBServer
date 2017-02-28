@@ -4,6 +4,7 @@ using A2BBCommon;
 using A2BBCommon.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
@@ -40,7 +41,7 @@ namespace A2BBAPI.Controllers
         /// <returns>The device with the given id, if authorized.</returns>
         private Device CheckDevice(int deviceId, string granterId)
         {
-            var device = _dbContext.Device.FirstOrDefault(d => d.Id == deviceId);
+            var device = _dbContext.Device.Include(d => d.User.Granter).FirstOrDefault(d => d.Id == deviceId);
 
             if (device == null)
             {
