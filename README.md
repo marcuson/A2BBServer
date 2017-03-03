@@ -63,13 +63,15 @@ The whole system overview is represented here through an image for a simpler und
 
 ![A2BB Overview](/Docs/overview.png)
 
-**User registration**  
+**User registration**
+
 1. The *Admin* login using its credentials and gains an access token to make authenticated REST calls.
 2. The *Admin* creates a new *User* with username and password.
 3. The *Admin* registers a new *Granter* via its serial.
 4. The *Admin* links the *Granter* to its *User*.
 
 **Device link**
+
 5. The *User* login to its profile page to make authenticated REST calls.
 6. (Optional) The *User* changes its password.
 7. The *User* starts a link process. A QR code with link info is displayed on the SPA interface. The user SPA checks periodically for link completion.
@@ -79,6 +81,7 @@ The whole system overview is represented here through an image for a simpler und
 11. After *Device* has acquired its id, the next check call from user SPA will inform that the link has been completed. The GUI can then been refreshed and the newly added *Device* will be visible.
 
 **Access request**
+
 12. The *Device* scans the QR code on the *Granter*.
 13. The *Device* connects to the *Granter* via Bluetooth and send the OTP from QR and its unique device id.
 14. The *Granter* checks the OTP: if wrong, sends immediatly a NACK back and prepares for a new access request.
