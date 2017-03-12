@@ -3,7 +3,6 @@ using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
 using System.Collections.Generic;
-using static IdentityServer4.IdentityServerConstants;
 
 namespace A2BBIdentityServer
 {
@@ -80,19 +79,22 @@ namespace A2BBIdentityServer
                 new Client
                 {
                     ClientId = Constants.A2BB_IDSRV_RO_CLIENT_ID,
-                    ClientName = "IdSrv client",
+                    ClientName = "IdSrv RO client",
                     Enabled = true,
 
                     AccessTokenLifetime = 60,
                     AccessTokenType = AccessTokenType.Jwt,
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    AllowedCorsOrigins = { "*", "http://localhost:4200" },
+                    AllowedCorsOrigins = { "*", "http://localhost:4200" }, // Allow origins for browser CORS as needed!
                     AllowOfflineAccess = true,
-                    AllowedScopes = {
+                    AllowedScopes =
+                    {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        Constants.A2BB_IDSRV_RESOURCE_NAME },
+                        Constants.A2BB_IDSRV_RESOURCE_NAME,
+                        Constants.A2BB_API_RESOURCE_NAME
+                    },
                     RequireClientSecret = false,
                     RequireConsent = false,
                     RefreshTokenUsage = TokenUsage.OneTimeOnly,
@@ -101,25 +103,50 @@ namespace A2BBIdentityServer
                 },
                 new Client
                 {
-                    ClientId = Constants.A2BB_API_CLIENT_ID,
-                    ClientName = "A2BB client",
+                    ClientId = Constants.A2BB_API_RO_CLIENT_ID,
+                    ClientName = "A2BB RO client",
                     Enabled = true,
 
                     AccessTokenLifetime = 60,
                     AccessTokenType = AccessTokenType.Jwt,
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    AllowedCorsOrigins = { "*", "http://localhost:4200" },
+                    AllowedCorsOrigins = { "*", "http://localhost:4200" }, // Allow origins for browser CORS as needed!
                     AllowOfflineAccess = true,
-                    AllowedScopes = {
+                    AllowedScopes =
+                    {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        Constants.A2BB_API_RESOURCE_NAME },
+                        Constants.A2BB_API_RESOURCE_NAME
+                    },
                     RequireClientSecret = false,
                     RequireConsent = false,
                     RefreshTokenUsage = TokenUsage.OneTimeOnly,
                     RefreshTokenExpiration = TokenExpiration.Sliding,
                     SlidingRefreshTokenLifetime = 60 * 60
+                },
+                new Client
+                {
+                    ClientId = Constants.A2BB_API_CC_CLIENT_ID,
+                    ClientName = "A2BB CC client",
+                    ClientSecrets =
+                    {
+                        new Secret(Constants.A2BB_API_CC_CLIENT_SECRET.Sha256())
+                    },
+                    Enabled = true,
+
+                    AccessTokenLifetime = 60,
+                    AccessTokenType = AccessTokenType.Jwt,
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedCorsOrigins = { "*", "http://localhost:4200" }, // Allow origins for browser CORS as needed!
+                    AllowOfflineAccess = false,
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        Constants.A2BB_API_RESOURCE_NAME
+                    },
+                    RequireClientSecret = true,
+                    RequireConsent = false
                 }
             };
         }

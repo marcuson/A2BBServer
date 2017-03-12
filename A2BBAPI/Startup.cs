@@ -8,11 +8,27 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace A2BBAPI
 {
+    /// <summary>
+    /// Class used to bootstrap the applicaiton.
+    /// </summary>
     public class Startup
     {
+        #region Public properties
+        /// <summary>
+        /// The chosen configuration.
+        /// </summary>
+        public IConfigurationRoot Configuration { get; }
+        #endregion
+
+        #region Public methods
+        /// <summary>
+        /// Main method to bootstrap the applicaiton.
+        /// </summary>
+        /// <param name="env">The hosting environment.</param>
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -23,36 +39,58 @@ namespace A2BBAPI
             Configuration = builder.Build();
         }
 
-        public IConfigurationRoot Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services">The services available during DI.</param>
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
             services.AddDbContext<A2BBApiDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("A2BBApiConnection")));
 
+            // Custom authorization policies
             var authUserPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .RequireClaim("sub")
                 .Build();
 
+            var authAdminPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireClaim("sub")
+                .RequireAssertion(h => h.User.IsInRole("Admin"))
+                .Build();
+
+            var authGranterPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireAssertion(h => h.User.Claims.FirstOrDefault(c => c.Type == "sub") == null)
+                .Build();
+
             services.AddMemoryCache();
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(new AuthorizeFilter(authUserPolicy));
-            });
+            services.AddMvc();
+
+            services.AddAuthorization(options => options.AddPolicy("User", authUserPolicy));
+            services.AddAuthorization(options => options.AddPolicy("Admin", authAdminPolicy));
+            services.AddAuthorization(options => options.AddPolicy("Granter", authGranterPolicy));
+
             services.AddCors();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app">The application builder.</param>
+        /// <param name="env">The hosting environment.</param>
+        /// <param name="loggerFactory">The logger factory.</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            // CORS configuration: allow all (you can be more restrictive if you want!)
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
+            // Use authentication via identity server (could be hosted in another machine)
             app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
             {
                 Authority = Constants.IDENTITY_SERVER_ENDPOINT,
@@ -63,5 +101,6 @@ namespace A2BBAPI
 
             app.UseMvc();
         }
+        #endregion
     }
 }

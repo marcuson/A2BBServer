@@ -1,19 +1,17 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using A2BBCommon.Models;
-using A2BBCommon;
-using A2BBAPI.Data;
-using IdentityModel.Client;
+﻿using A2BBAPI.Data;
 using A2BBAPI.DTO;
-using Microsoft.Extensions.Logging;
 using A2BBAPI.Models;
-using System.Collections.Generic;
 using A2BBAPI.Utils;
-using static A2BBAPI.Utils.ClaimsUtils;
+using A2BBCommon;
+using A2BBCommon.DTO;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using static A2BBAPI.Utils.ClaimsUtils;
 
 namespace A2BBAPI.Controllers
 {
@@ -22,7 +20,7 @@ namespace A2BBAPI.Controllers
     /// </summary>
     [Produces("application/json")]
     [Route("api/me/devices")]
-    [Authorize]
+    [Authorize("User")]
     public class MeDevicesController : Controller
     {
         #region Private fields
@@ -59,7 +57,7 @@ namespace A2BBAPI.Controllers
         /// <summary>
         /// Get all devices associated to currently authorized user.
         /// </summary>
-        /// <returns>The list of device belonging to the current user.</returns>
+        /// <returns>The list of device associated to the current user.</returns>
         [HttpGet]
         public ResponseWrapper<IEnumerable<Device>> ListDevices()
         {
@@ -83,13 +81,6 @@ namespace A2BBAPI.Controllers
             catch (RestReturnException ex)
             {
                 return new ResponseWrapper<string>(ex.Value);
-            }
-
-            var response = ClientUtils.GetROClient(Constants.A2BB_API_RESOURCE_NAME, Constants.A2BB_API_CLIENT_ID, claimsHolder.Name, req.Password);
-
-            if (response.IsError)
-            {
-                return new ResponseWrapper<string>(Constants.RestReturn.ERR_INVALID_PASS);
             }
 
             var sub = _dbContext.Subject.FirstOrDefault(s => s.Id == claimsHolder.Sub);
@@ -118,7 +109,7 @@ namespace A2BBAPI.Controllers
         /// <summary>
         /// Get a device associated to currently authorized user.
         /// </summary>
-        /// <returns>The device belonging to the current user.</returns>
+        /// <returns>The device associated to the current user.</returns>
         [HttpGet]
         [Route("{deviceId}")]
         public ResponseWrapper<Device> GetDevice([FromRoute] int deviceId)

@@ -1,7 +1,7 @@
 ﻿namespace A2BBCommon
 {
     /// <summary>
-    /// Constants shared among Identity Server and API.
+    /// Constants shared among Identity Server and actual A2BB API.
     /// </summary>
     public static class Constants
     {
@@ -9,30 +9,35 @@
         /// <summary>
         /// The identity server endpoint.
         /// </summary>
-        public const string IDENTITY_SERVER_ENDPOINT = "http://localhost:5000";
+        public const string IDENTITY_SERVER_ENDPOINT = "http://192.168.1.138:5000";
 
         /// <summary>
         /// The API endpoint.
         /// </summary>
-        public const string API_ENDPOINT = "http://localhost:5001";
+        public const string API_ENDPOINT = "http://192.168.1.138:5001";
 
         /// <summary>
-        /// The client id for A2BB API.
+        /// The client id for A2BB API (for resource onwer/pass flow).
         /// </summary>
-        public const string A2BB_API_CLIENT_ID = "a2bb_api";
+        public const string A2BB_API_RO_CLIENT_ID = "a2bb.ro_api";
 
         /// <summary>
-        /// The client secret for A2BB API.
+        /// The client id for A2BB API (for client flow).
         /// </summary>
-        public const string A2BB_API_CLIENT_SECRET = "a2bb_api_secret";
+        public const string A2BB_API_CC_CLIENT_ID = "a2bb.cc_api";
 
         /// <summary>
-        /// The client id for A2BB Identity Server (resource owner).
+        /// The client secret for A2BB API (for client flow).
+        /// </summary>
+        public const string A2BB_API_CC_CLIENT_SECRET = "a2bb.cc_api_secret";
+
+        /// <summary>
+        /// The client id for A2BB Identity Server (for resource onwer/pass flow).
         /// </summary>
         public const string A2BB_IDSRV_RO_CLIENT_ID = "a2bb.ro_id_srv";
 
         /// <summary>
-        /// Name of IdSrv API resource.
+        /// Name of identity server API resource.
         /// </summary>
         public const string A2BB_IDSRV_RESOURCE_NAME = "IDSRV_API";
 
@@ -56,6 +61,10 @@
             ERR_INVALID_PASS,
             ERR_USER_UPDATE,
             ERR_LINK,
+            ERR_DEVICE_NOT_FOUND,
+            ERR_DEVICE_DISABLED,
+            ERR_INVALID_GRANTER,
+            ERR_GRANTER_NOT_FOUND,
             ERR_UNKNOWN
         }
         #endregion
@@ -96,6 +105,14 @@
                     return 0x00000008;
                 case Constants.RestReturn.ERR_LINK:
                     return 0x00000009;
+                case Constants.RestReturn.ERR_DEVICE_NOT_FOUND:
+                    return 0x0000000A;
+                case Constants.RestReturn.ERR_DEVICE_DISABLED:
+                    return 0x0000000B;
+                case Constants.RestReturn.ERR_INVALID_GRANTER:
+                    return 0x0000000C;
+                case Constants.RestReturn.ERR_GRANTER_NOT_FOUND:
+                    return 0x0000000D;
                 default:
                     return 0xFFFFFFFF;
             }
@@ -130,6 +147,14 @@
                     return "Error during user update";
                 case Constants.RestReturn.ERR_LINK:
                     return "Error during linking/link refresh";
+                case Constants.RestReturn.ERR_DEVICE_NOT_FOUND:
+                    return "Error device not found";
+                case Constants.RestReturn.ERR_DEVICE_DISABLED:
+                    return "Error device disabled";
+                case Constants.RestReturn.ERR_INVALID_GRANTER:
+                    return "Error invalid granter";
+                case Constants.RestReturn.ERR_GRANTER_NOT_FOUND:
+                    return "Error granter not found";
                 default:
                     return "Unknown erorr";
             }

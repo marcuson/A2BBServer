@@ -1,5 +1,5 @@
 using A2BBCommon;
-using A2BBCommon.Models;
+using A2BBCommon.DTO;
 using A2BBIdentityServer.DTO;
 using A2BBIdentityServer.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace A2BBIdentityServer.Controllers
 {

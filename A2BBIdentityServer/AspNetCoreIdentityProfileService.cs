@@ -1,13 +1,9 @@
-﻿using A2BBCommon.Models;
-using A2BBIdentityServer.Models;
+﻿using A2BBIdentityServer.Models;
 using IdentityModel;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -41,7 +37,7 @@ namespace A2BBIdentityServer
         /// This method is called whenever claims about the user are requested (e.g. during token creation or via the userinfo endpoint)
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <returns></returns>
+        /// <returns>A task with profile data as result.</returns>
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             if (context.RequestedClaimTypes.Any())
@@ -65,11 +61,11 @@ namespace A2BBIdentityServer
         }
 
         /// <summary>
-        /// This method gets called whenever identity server needs to determine if the user is valid or active (e.g. if the user's account has been deactivated since they logged in).
-        /// (e.g. during token issuance or validation).
+        /// This method gets called whenever identity server needs to determine if the user is valid or active (e.g. if the user's 
+        /// account has been deactivated since they logged in, during token issuance or validation).
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <returns></returns>
+        /// <returns>A task which tells if user is active as result.</returns>
         public async Task IsActiveAsync(IsActiveContext context)
         {
             var sub = context.Subject.GetSubjectId();

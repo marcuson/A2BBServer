@@ -13,14 +13,58 @@ namespace A2BBAPI.Utils
         /// <summary>
         /// Get token for API using username and password.
         /// </summary>
+        /// <param name="clientId">The client id.</param>
+        /// <param name="scope">The requested scope.</param>
         /// <param name="username">The username.</param>
         /// <param name="password">The password.</param>
-        /// <returns></returns>
+        /// <returns>A token response.</returns>
         public static TokenResponse GetROClient(string scope, string clientId, string username, string password)
         {
-            var disco = DiscoveryClient.GetAsync(Constants.IDENTITY_SERVER_ENDPOINT).Result;
+            var discoClient = new DiscoveryClient(Constants.IDENTITY_SERVER_ENDPOINT);
+            discoClient.Policy.RequireHttps = false; // Do not user in production!
+
+            var disco = discoClient.GetAsync().Result;
             var client = new TokenClient(disco.TokenEndpoint);
             return client.RequestResourceOwnerPasswordAsync(username, password, scope, new Dictionary<string, string> {
+                { "client_id", clientId }
+            }).Result;
+        }
+
+        /// <summary>
+        /// Get token for API using client credentials.
+        /// </summary>
+        /// <param name="clientId">The client id.</param>
+        /// <param name="scope">The requested scope.</param>
+        /// <param name="secret">The client secret.</param>
+        /// <returns>A token response.</returns>
+        public static TokenResponse GetCCClient(string scope, string clientId, string secret)
+        {
+            var discoClient = new DiscoveryClient(Constants.IDENTITY_SERVER_ENDPOINT);
+            discoClient.Policy.RequireHttps = false; // Do not user in production!
+
+            var disco = discoClient.GetAsync().Result;
+            var client = new TokenClient(disco.TokenEndpoint);
+            return client.RequestClientCredentialsAsync(scope, new Dictionary<string, string> {
+                { "client_id", clientId },
+                { "client_secret", secret}
+            }).Result;
+        }
+
+        /// <summary>
+        /// Get token for API using refresh token.
+        /// </summary>
+        /// <param name="clientId">The client id.</param>
+        /// <param name="scope">The requested scope.</param>
+        /// <param name="refreshToken">The refresh token.</param>
+        /// <returns>A token response.</returns>
+        public static TokenResponse GetRTClient(string scope, string clientId, string refreshToken)
+        {
+            var discoClient = new DiscoveryClient(Constants.IDENTITY_SERVER_ENDPOINT);
+            discoClient.Policy.RequireHttps = false; // Do not user in production!
+
+            var disco = discoClient.GetAsync().Result;
+            var client = new TokenClient(disco.TokenEndpoint);
+            return client.RequestRefreshTokenAsync(refreshToken, new Dictionary<string, string> {
                 { "client_id", clientId }
             }).Result;
         }

@@ -2,16 +2,11 @@ using A2BBAPI.Data;
 using A2BBAPI.Utils;
 using A2BBCommon;
 using A2BBCommon.DTO;
-using A2BBCommon.Models;
-using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -26,7 +21,7 @@ namespace A2BBAPI.Controllers
     /// </summary>
     [Produces("application/json")]
     [Route("api/me")]
-    [Authorize]
+    [Authorize("User")]
     public class MeController : Controller
     {
         #region Private fields
