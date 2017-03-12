@@ -108,3 +108,5 @@ Open the main solution file with Visual Studio, then on the Solution Explorer vi
 ## Start server
 
 After you have built the projects with Visual Studio, go to the project root folder, then under `Starter` directory you can find 2 files, `start.bat` and `stop.bat` which you can use to start/stop the Identity Server and API REST server proxied via [Nginx](https://www.nginx.com/resources/wiki/). The files are meant to be used under Windows based OS, but a porting to Linux and OSX based systems should be straightforward.
+
+**NOTE**: if you have not changed the scripts from `Scripts` folder, there is a default administrator account with username "Admin" and password "Admin.123".
